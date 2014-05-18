@@ -14,16 +14,17 @@ public class Command {
         if(!commands.contains(command)){
             commands.add(command);
         } else {
-            ThePlague.instance().getLogger().warning("Attempted to register "+command.getName()+" when it is already registered!");
+            ThePlague.instance().getLogger().warning("Attempted to register "+command.commandName()+" when it is already registered!");
         }
     }
 
     public static BaseCommand findByString(String name){
         for(BaseCommand cmd : commands){
-            if(cmd.getName().equalsIgnoreCase)(name){
+            if(cmd.commandName().equalsIgnoreCase(name)){
                     return cmd;
             }
         }
+        return null;
     }
 
     public static void registerAlias(BaseCommand cmd, String alias){
