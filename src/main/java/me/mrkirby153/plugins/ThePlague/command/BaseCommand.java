@@ -1,6 +1,7 @@
 package me.mrkirby153.plugins.ThePlague.command;
 
 import me.mrkirby153.plugins.ThePlague.ThePlague;
+import org.bukkit.command.CommandSender;
 
 public abstract class BaseCommand {
     private String permissionRequired = "%all%";
@@ -30,4 +31,6 @@ public abstract class BaseCommand {
     public String getCommandDescription(){
         return this.commandDescription;
     }
+
+    public abstract void execute(CommandSender sender, String[] args);
 }
