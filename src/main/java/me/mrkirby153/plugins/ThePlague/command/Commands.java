@@ -5,7 +5,7 @@ import me.mrkirby153.plugins.ThePlague.ThePlague;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Command {
+public class Commands {
 
     private static ArrayList<BaseCommand> commands = new ArrayList<BaseCommand>();
     private static HashMap<String, BaseCommand> aliases = new HashMap<String, BaseCommand>();
