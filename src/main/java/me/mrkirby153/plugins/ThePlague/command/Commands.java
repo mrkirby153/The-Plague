@@ -18,7 +18,7 @@ public class Commands {
         }
     }
 
-    public static BaseCommand findByString(String name){
+    public static BaseCommand findByName(String name){
         for(BaseCommand cmd : commands){
             if(cmd.commandName().equalsIgnoreCase(name)){
                     return cmd;
