@@ -13,15 +13,16 @@ public class ChatHelper {
     private static ThePlague plugin = ThePlague.instance();
 
     public static void sendToPlayer(Player p, String message) {
-        if(p == null)
+        if (p == null)
             return;
-        String msg = ChatColor.WHITE + "[" + ChatColor.DARK_RED + "%s" +ChatColor.WHITE + "] %s";
+        String msg = ChatColor.WHITE + "[" + ChatColor.DARK_RED + "%s" + ChatColor.WHITE + "] %s";
         p.sendMessage(String.format(msg, plugin.getName(), message));
     }
+
     public static void sendToPlayer(String playerName, String message) {
         @SuppressWarnings("deprecation")
         Player p = Bukkit.getPlayerExact(playerName);
-        if(p != null)
+        if (p != null)
             sendToPlayer(p, message);
     }
 
@@ -41,5 +42,9 @@ public class ChatHelper {
         } else {
             sendToConsole(message);
         }
+    }
+
+    public static void sendAdminMessage(String message) {
+        Bukkit.broadcast(ChatColor.ITALIC + "" + ChatColor.GRAY + "[ThePlague] " + message, "theplague.admin.messages");
     }
 }

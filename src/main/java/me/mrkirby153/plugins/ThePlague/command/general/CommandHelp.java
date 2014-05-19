@@ -41,7 +41,7 @@ public class CommandHelp extends BaseCommand {
             page = (int) totalCmdPgs;
         player.sendMessage(ChatColor.BLUE + "------ ThePlague (" + page + "/" + (int) totalCmdPgs + ") ------");
         for (int i = (page - 1) * 12; i < ((page - 1) * 12) + 12; i++) {
-            if (i > cmds.size())
+            if (i >= cmds.size())
                 break;
             BaseCommand cmd = cmds.get(i);
             player.sendMessage(ChatColor.GREEN + " - " + ChatColor.LIGHT_PURPLE + "/theplague " + cmd.commandName() + ChatColor.GREEN + " : " + ChatColor.AQUA + cmd.getCommandDescription());
