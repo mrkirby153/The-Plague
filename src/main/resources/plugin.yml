@@ -2,3 +2,8 @@ author: mrkirby153
 main: me.mrkirby153.plugins.ThePlague.ThePlague
 name: ThePlague
 version: 1.0
+commands:
+    theplague:
+        description: Base ThePlague Command
+        aliases: ['plague', 'ThePlague']
+        usage: /theplague <args>

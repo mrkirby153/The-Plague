@@ -1,5 +1,8 @@
 package me.mrkirby153.plugins.ThePlague;
 
+import me.mrkirby153.plugins.ThePlague.command.CmdExecutor;
+import me.mrkirby153.plugins.ThePlague.command.Commands;
+import me.mrkirby153.plugins.ThePlague.command.general.CommandHelp;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ThePlague extends JavaPlugin {
@@ -12,6 +15,9 @@ public class ThePlague extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        getCommand("theplague").setExecutor(new CmdExecutor());
+
+        Commands.registerComamnd(new CommandHelp());
     }
 
     @Override
