@@ -1,5 +1,6 @@
-package me.mrkirby153.plugins.ThePlague;
+package me.mrkirby153.plugins.ThePlague.arena;
 
+import me.mrkirby153.plugins.ThePlague.ThePlague;
 import me.mrkirby153.plugins.ThePlague.utils.ChatHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -35,10 +36,10 @@ public class Arena {
     public void saveArenaToFile() {
         // Loop through every block and save it to a file
         ChatHelper.sendAdminMessage("Saving arena " + this.name + " to file. May cause lag!");
-        File arenaDataFolder = new File(ThePlague.instance().getDataFolder().getAbsolutePath() + File.separator + "data");
+        File arenaDataFolder = new File(ThePlague.instance().getDataFolder().getAbsolutePath() + File.separator + "data" + File.separator + name);
         if (!arenaDataFolder.exists())
             arenaDataFolder.mkdirs();
-        File arenaBlocksFile = new File(arenaDataFolder.getAbsolutePath() + File.separator + name + ".arena");
+        File arenaBlocksFile = new File(arenaDataFolder.getAbsolutePath() + File.separator + name + ".arena-blocks");
         Writer writer;
         try {
             writer = new PrintWriter(arenaBlocksFile);
@@ -100,8 +101,10 @@ public class Arena {
     }
 
     public void loadArenaFromFile() {
-        File arenaDataFolder = new File(ThePlague.instance().getDataFolder().getAbsolutePath() + File.separator + "data");
-        File arenaBlocksFile = new File(arenaDataFolder.getAbsolutePath() + File.separator + name + ".arena");
+        File arenaDataFolder = new File(ThePlague.instance().getDataFolder().getAbsolutePath() + File.separator + "data" + File.separator + name);
+        if (!arenaDataFolder.exists())
+            arenaDataFolder.mkdirs();
+        File arenaBlocksFile = new File(arenaDataFolder.getAbsolutePath() + File.separator + name + ".arena-blocks");
         ChatHelper.sendAdminMessage("Loading Arena From File...");
         try {
             BufferedReader br = new BufferedReader(new FileReader(arenaBlocksFile));
@@ -131,6 +134,7 @@ public class Arena {
                 l.getBlock().setData((byte) Integer.parseInt(block[1]));
             }
             br.close();
+            ChatHelper.sendAdminMessage("Done!");
         } catch (IOException e) {
             e.printStackTrace();
         }
