@@ -1,5 +1,6 @@
 package me.mrkirby153.plugins.ThePlague;
 
+import me.mrkirby153.plugins.ThePlague.command.arena.CommandCreate;
 import me.mrkirby153.plugins.ThePlague.command.CmdExecutor;
 import me.mrkirby153.plugins.ThePlague.command.Commands;
 import me.mrkirby153.plugins.ThePlague.command.general.CommandHelp;
@@ -18,6 +19,7 @@ public class ThePlague extends JavaPlugin {
         getCommand("theplague").setExecutor(new CmdExecutor());
 
         Commands.registerComamnd(new CommandHelp());
+        Commands.registerComamnd(new CommandCreate());
     }
 
     @Override
