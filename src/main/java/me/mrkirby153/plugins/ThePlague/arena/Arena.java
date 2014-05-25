@@ -179,4 +179,16 @@ public class Arena {
         Random r = new Random();
         return uninfedtedSpawnLocations.get(r.nextInt(uninfedtedSpawnLocations.size()));
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public Location getPt1() {
+        return l1;
+    }
+
+    public Location getPt2() {
+        return l2;
+    }
 }

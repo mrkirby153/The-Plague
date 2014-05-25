@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Arenas {
 
     public static ArrayList<ArenaCreator> creators = new ArrayList<ArenaCreator>();
+    public static ArrayList<Arena> arenas = new ArrayList<Arena>();
 
     public static void activateCreator(Player player) {
         if (findCreatorByName(player.getName()) == null) {
@@ -33,6 +34,22 @@ public class Arenas {
         for (ArenaCreator ac : creators) {
             if (ac.getName().equalsIgnoreCase(name))
                 return ac;
+        }
+        return null;
+    }
+
+    public static void registerArena(Arena arena){
+        arenas.add(arena);
+    }
+
+    public static void unregisterArena(Arena arena){
+        arenas.remove(arena);
+    }
+
+    public static Arena findByName(String name){
+        for(Arena a : arenas){
+            if(a.getName().equalsIgnoreCase(name))
+                return a;
         }
         return null;
     }
