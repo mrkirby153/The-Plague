@@ -1,5 +1,6 @@
 package me.mrkirby153.plugins.ThePlague.arena.players;
 
+import me.mrkirby153.plugins.ThePlague.arena.Arena;
 import me.mrkirby153.plugins.ThePlague.utils.ChatHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -14,6 +15,8 @@ public class ArenaCreator implements Listener {
 
     private Location pt1;
     private Location pt2;
+
+    private Arena selectedArena;
 
     public ArenaCreator(Player player) {
         this.player = player;
@@ -41,6 +44,14 @@ public class ArenaCreator implements Listener {
 
     public Player getPlayer() {
         return this.player;
+    }
+
+    public void setSelectedArena(Arena arena) {
+        this.selectedArena = arena;
+    }
+
+    public Arena getSelectedArena() {
+        return this.selectedArena;
     }
 
     @EventHandler

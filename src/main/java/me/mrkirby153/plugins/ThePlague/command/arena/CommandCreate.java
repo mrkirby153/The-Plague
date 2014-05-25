@@ -48,6 +48,41 @@ public class CommandCreate extends BaseCommand {
                 test.addUninfectedSpawn(p.getLocation());
                 test.saveRespawnData();
             }
+            if(args[0].equalsIgnoreCase("select")){
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage(notPlayer);
+                    return;
+                }
+                Player p = (Player) sender;
+                ArenaCreator creator = Arenas.findCreatorByName(p.getName());
+                if (creator == null) {
+                    ChatHelper.sendToPlayer(p, ChatColor.RED + "You must be in arena create mode to do that!");
+                    return;
+                }
+                creator.setSelectedArena(null);
+                ChatHelper.sendToPlayer(p, ChatColor.GREEN + "Cleared current selection!");
+            }
+        }
+        if (args.length == 2) {
+            if (args[0].equalsIgnoreCase("select")) {
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage(notPlayer);
+                    return;
+                }
+                Player p = (Player) sender;
+                Arena arena = Arenas.findByName(args[1]);
+                if (arena == null) {
+                    ChatHelper.sendToPlayer(p, ChatColor.RED + "There is no such arena with name '" + args[1] + "'!");
+                    return;
+                }
+                ArenaCreator creator = Arenas.findCreatorByName(p.getName());
+                if (creator == null) {
+                    ChatHelper.sendToPlayer(p, ChatColor.RED + "You must be in arena create mode to do that!");
+                    return;
+                }
+                creator.setSelectedArena(arena);
+                ChatHelper.sendToPlayer(p, ChatColor.GREEN + "Selected arena " + arena.getName() + "!");
+            }
         }
     }
 }
