@@ -45,18 +45,20 @@ public class ArenaCreator implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
-        if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
-            event.setCancelled(true);
-            Location l = event.getClickedBlock().getLocation();
-            setPt1(l);
-            ChatHelper.sendToPlayer(event.getPlayer(), ChatColor.GOLD + "Point 1 set!");
-            return;
-        }
-        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            event.setCancelled(true);
-            Location l = event.getClickedBlock().getLocation();
-            setPt2(l);
-            ChatHelper.sendToPlayer(event.getPlayer(), ChatColor.GOLD + "Point 2 set!");
+        if (!event.getPlayer().isSneaking()) {
+            if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+                event.setCancelled(true);
+                Location l = event.getClickedBlock().getLocation();
+                setPt1(l);
+                ChatHelper.sendToPlayer(event.getPlayer(), ChatColor.GOLD + "Point 1 set!");
+                return;
+            }
+            if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                event.setCancelled(true);
+                Location l = event.getClickedBlock().getLocation();
+                setPt2(l);
+                ChatHelper.sendToPlayer(event.getPlayer(), ChatColor.GOLD + "Point 2 set!");
+            }
         }
     }
 
