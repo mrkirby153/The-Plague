@@ -7,27 +7,30 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.util.Vector;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ArenaUtils {
     private static String dataPath = ThePlague.instance.getDataFolder().getAbsolutePath() + File.separator + "data" + File.separator;
 
     private static JSONParser parser = new JSONParser();
+
     public static void saveBlocksToFile(Arena arena) {
         // Loop through every block and save it to a file
         Location l1 = arena.getPt1();
         Location l2 = arena.getPt2();
         World world = arena.getPt1().getWorld();
         ChatHelper.sendAdminMessage("Saving arena " + arena.getName() + " to file. May cause lag!");
-        File data = new File(ThePlague.instance().getDataFolder().getAbsolutePath() + File.separator + "data");
+        File data = new File(ThePlague.instance().getDataFolder().getAbsolutePath() + File.separator + "data" + File.separator + arena.getName());
         if (!data.exists())
             data.mkdirs();
-        File arenaBlocksFile = new File(dataPath + arena.getName() + File.separator + ".arena-blocks");
+        File arenaBlocksFile = new File(dataPath + arena.getName() + File.separator + arena.getName() + ".arena-blocks");
         Writer writer;
         try {
             writer = new PrintWriter(arenaBlocksFile);
@@ -61,7 +64,6 @@ public class ArenaUtils {
             minZ = l2.getBlockZ();
             maxZ = l1.getBlockZ();
         }
-        System.out.println(minZ + "," + maxZ);
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 for (int z = minZ; z <= maxZ; z++) {
@@ -89,8 +91,8 @@ public class ArenaUtils {
     }
 
     public static void loadBlocksFromFile(Arena arena) {
-        File arenaBlocksFile = new File(dataPath + arena.getName() + File.separator + ".arena-blocks");
-        if(!arenaBlocksFile.exists())
+        File arenaBlocksFile = new File(dataPath + arena.getName() + File.separator + arena.getName() + ".arena-blocks");
+        if (!arenaBlocksFile.exists())
             return;
         ChatHelper.sendAdminMessage("Loading Arena From File...");
         try {
@@ -128,22 +130,27 @@ public class ArenaUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static void addArena(Arena arena){
+    public static void addArena(Arena arena) {
         try {
             File arenas = new File(dataPath + "arenas.json");
             if (!arenas.exists())
                 arenas.createNewFile();
             // Load json from file.
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader(arenas));
-            System.out.println(jsonObject.toJSONString());
+            // Check if file is empty
+            BufferedReader br = new BufferedReader(new FileReader(arenas));
+            JSONObject jsonObject;
+            if (br.readLine() != null)
+                jsonObject = (JSONObject) parser.parse(new FileReader(arenas));
+            else
+                jsonObject = new JSONObject();
             JSONObject newArena = new JSONObject();
             JSONObject pt1 = new JSONObject();
             pt1.put("x", arena.getPt1().getBlockX());
-            pt1.put("y",  arena.getPt1().getBlockY());
+            pt1.put("y", arena.getPt1().getBlockY());
             pt1.put("z", arena.getPt1().getBlockZ());
             pt1.put("pitch", arena.getPt1().getPitch());
             pt1.put("yaw", arena.getPt1().getYaw());
-            newArena.put("pt1",pt1);
+            newArena.put("pt1", pt1);
             JSONObject pt2 = new JSONObject();
             pt2.put("x", arena.getPt2().getBlockX());
             pt2.put("y", arena.getPt2().getBlockY());
@@ -151,10 +158,10 @@ public class ArenaUtils {
             pt2.put("pitch", arena.getPt2().getPitch());
             pt2.put("yaw", arena.getPt2().getYaw());
             newArena.put("pt2", pt2);
-            newArena.put("world", arena.getPt1().getWorld());
+            newArena.put("world", arena.getPt1().getWorld().getName());
             jsonObject.put(arena.getName(), newArena);
             FileWriter file = new FileWriter(arenas);
-            file.write(jsonObject.toJSONString());
+            file.write(formatJson(jsonObject.toJSONString()));
             file.flush();
             file.close();
         } catch (IOException e) {
@@ -162,5 +169,84 @@ public class ArenaUtils {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        Arenas.registerArena(arena);
+    }
+
+    public static void loadAllArenas() {
+        try {
+            File arenas = new File(dataPath + "arenas.json");
+            if (!arenas.exists())
+                arenas.createNewFile();
+            // Load json from file.
+            // Check if file is empty
+            BufferedReader br = new BufferedReader(new FileReader(arenas));
+            JSONObject jsonObject;
+            if (br.readLine() == null)
+                return;
+            jsonObject = (JSONObject) parser.parse(new FileReader(arenas));
+            Iterator<String> keys = jsonObject.keySet().iterator();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                JSONObject array = (JSONObject) jsonObject.get(key);
+                JSONObject l1 = (JSONObject) array.get("pt1");
+                JSONObject l2 = (JSONObject) array.get("pt2");
+                String world = (String) array.get("world");
+                if (Bukkit.getWorld(world) == null)
+                    continue;
+                System.out.println(l1.get("x").getClass().getSimpleName());
+                Location pt1 = new Location(Bukkit.getWorld(world), ((Long) l1.get("x")).doubleValue(), ((Long) l1.get("y")).doubleValue(), ((Long) l1.get("z")).doubleValue());
+                Location pt2 = new Location(Bukkit.getWorld(world), ((Long) l2.get("x")).doubleValue(), ((Long) l2.get("y")).doubleValue(), ((Long) l2.get("z")).doubleValue());
+                Arenas.registerArena(new Arena(key, pt1, pt2, world));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String formatJson(String json) {
+        StringBuilder sb = new StringBuilder();
+        char newline = '\n';
+        int indent = 0; //current indent level
+        int factor = 2; //how many spaces per indent
+        char[] data = json.toCharArray();
+        for (int j = 0; j < data.length; j++) {
+            sb.append(data[j]);
+            if (data[j] == '{') {
+                sb.append(newline);
+                for (int w = factor * ++indent; w > 0; w--) {
+                    sb.append(' ');
+                }
+            } else if (data[j] == '}') {
+                sb.delete(sb.length() - 1, sb.length());
+                sb.append(newline);
+                for (int w = factor * --indent; w > 0; w--) {
+                    sb.append(' ');
+                }
+                sb.append('}');
+            } else if (data[j] == ',') {
+                sb.append(newline);
+                for (int w = factor * indent; w > 0; w--) {
+                    sb.append(' ');
+                }
+            } else if (data[j] == ':') {
+                sb.append(' ');
+            }
+        }
+        return sb.toString();
+    }
+
+    public static boolean isProtected(Location location) {
+        return isProtected(location.toVector());
+    }
+
+    public static boolean isProtected(Vector vector) {
+        ArrayList<Arena> arenas = Arenas.arenas;
+        for (Arena a : arenas) {
+            Location pt1 = a.getPt1();
+            Location pt2 = a.getPt2();
+            if (vector.isInAABB(Vector.getMinimum(pt1.toVector(), pt2.toVector()), Vector.getMaximum(pt1.toVector(), pt2.toVector())))
+                return true;
+        }
+        return false;
     }
 }
