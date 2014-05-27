@@ -32,6 +32,20 @@ public class CommandSelect extends BaseCommand {
             ChatHelper.sendToPlayer(p, ChatColor.DARK_RED + "Deselected arena!");
         }
         if (args.length == 1) {
+            if (args[0].equalsIgnoreCase("list")) {
+                ChatHelper.send(sender, ChatColor.GOLD + "----- Arenas -----");
+                for(Arena a : Arenas.arenas){
+                    ChatHelper.send(sender, String.format("   §6 - §b %s §9in state §d%s", a.getName(), "NULL"));
+                }
+                if(sender instanceof Player){
+                    Player p = (Player) sender;
+                    ArenaCreator creator = Arenas.findCreatorByName(p.getName());
+                    if(creator != null)
+                        if(creator.getSelectedArena() != null)
+                            ChatHelper.send(sender, String.format("§1Selected: §4%s", creator.getSelectedArena().getName()));
+                }
+                return;
+            }
             if (!(sender instanceof Player)) {
                 sender.sendMessage(notPlayer);
                 return;
