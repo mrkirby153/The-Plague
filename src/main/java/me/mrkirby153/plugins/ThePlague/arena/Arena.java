@@ -9,10 +9,10 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -24,6 +24,8 @@ public class Arena {
     private ArrayList<String> playersInGame = new ArrayList<String>();
 
     private ArrayList<Location> uninfedtedSpawnLocations = new ArrayList<Location>();
+    private Location infectedSpawn;
+    private ArenaState state = ArenaState.DISABLED;
 
     public Arena(String name, Location pt1, Location pt2, World world) {
         this.name = name;
@@ -83,6 +85,25 @@ public class Arena {
         return uninfedtedSpawnLocations.get(r.nextInt(uninfedtedSpawnLocations.size()));
     }
 
+    public void loadRespawnLocations() {
+        try {
+            File spawns = new File(ThePlague.instance().getDataFolder().getAbsolutePath() + File.separator + "data" + File.separator + this.name + File.separator + name + ".spawns");
+            if (!spawns.exists())
+                return;
+            BufferedReader br = new BufferedReader(new FileReader(spawns));
+            if(br.readLine() == null)
+                return;
+            JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader(spawns));
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public String getName() {
         return name;
     }
@@ -97,11 +118,11 @@ public class Arena {
 
     public void join(Player p) {
         //TODO: Save inventory
-        if(Arenas.findLobbyForArena(this) != null) {
+        if (Arenas.findLobbyForArena(this) != null) {
             p.teleport(Arenas.findLobbyForArena(this).getSpawn());
             this.playersInGame.add(p.getName());
-        }else {
-            ChatHelper.sendToPlayer(p, ChatColor.RED+"That arena is missing a lobby");
+        } else {
+            ChatHelper.sendToPlayer(p, ChatColor.RED + "That arena is missing a lobby");
         }
     }
 
