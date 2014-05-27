@@ -1,6 +1,7 @@
 package me.mrkirby153.plugins.ThePlague.arena.players;
 
 import me.mrkirby153.plugins.ThePlague.arena.Arena;
+import me.mrkirby153.plugins.ThePlague.arena.Arenas;
 import me.mrkirby153.plugins.ThePlague.utils.ChatHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -57,6 +58,8 @@ public class ArenaCreator implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         if (!event.getPlayer().isSneaking()) {
+            if(!event.getItem().equals(Arenas.creationStick()))
+                return;
             if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
                 event.setCancelled(true);
                 Location l = event.getClickedBlock().getLocation();
