@@ -78,6 +78,8 @@ public class CommandCreate extends BaseCommand {
                 ArenaUtils.saveBlocksToFile(arena);
                 ArenaUtils.addArena(arena);
                 creator.setSelectedArena(arena);
+                creator.setPt2(null);
+                creator.setPt1(null);
                 ChatHelper.sendToPlayer(p, ChatColor.GREEN + "Created and selected arena " + arenaName);
             }
         }
