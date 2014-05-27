@@ -247,6 +247,13 @@ public class ArenaUtils {
             if (vector.isInAABB(Vector.getMinimum(pt1.toVector(), pt2.toVector()), Vector.getMaximum(pt1.toVector(), pt2.toVector())))
                 return true;
         }
+        ArrayList<Lobby> lobby = Arenas.lobbies;
+        for (Lobby l : lobby) {
+            Location pt1 = l.getPt1();
+            Location pt2 = l.getPt2();
+            if (vector.isInAABB(Vector.getMinimum(pt1.toVector(), pt2.toVector()), Vector.getMaximum(pt1.toVector(), pt2.toVector())))
+                return true;
+        }
         return false;
     }
 }
