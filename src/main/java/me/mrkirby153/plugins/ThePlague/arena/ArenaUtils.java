@@ -1,6 +1,7 @@
 package me.mrkirby153.plugins.ThePlague.arena;
 
 import me.mrkirby153.plugins.ThePlague.ThePlague;
+import me.mrkirby153.plugins.ThePlague.arena.lobby.Lobby;
 import me.mrkirby153.plugins.ThePlague.utils.ChatHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -193,7 +194,6 @@ public class ArenaUtils {
                 String world = (String) array.get("world");
                 if (Bukkit.getWorld(world) == null)
                     continue;
-                System.out.println(l1.get("x").getClass().getSimpleName());
                 Location pt1 = new Location(Bukkit.getWorld(world), ((Long) l1.get("x")).doubleValue(), ((Long) l1.get("y")).doubleValue(), ((Long) l1.get("z")).doubleValue());
                 Location pt2 = new Location(Bukkit.getWorld(world), ((Long) l2.get("x")).doubleValue(), ((Long) l2.get("y")).doubleValue(), ((Long) l2.get("z")).doubleValue());
                 Arenas.registerArena(new Arena(key, pt1, pt2, world));
@@ -203,7 +203,42 @@ public class ArenaUtils {
         }
     }
 
-    private static String formatJson(String json) {
+    public static void loadAllLobbies() {
+        try {
+            File lobbies = new File(dataPath + "lobbies.json");
+            if (!lobbies.exists())
+                lobbies.createNewFile();
+            BufferedReader br = new BufferedReader(new FileReader(lobbies));
+            if (br.readLine() == null)
+                return;
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader(lobbies));
+            Iterator<String> keys = jsonObject.keySet().iterator();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                JSONObject array = (JSONObject) jsonObject.get(key);
+                JSONObject l1 = (JSONObject) array.get("pt1");
+                JSONObject l2 = (JSONObject) array.get("pt2");
+                JSONObject spwn = (JSONObject) array.get("spawn");
+                if (Bukkit.getWorld((String) l1.get("world")) == null || Bukkit.getWorld((String) l2.get("world")) == null)
+                    continue;
+                System.out.println(spwn.get("yaw").getClass().getSimpleName());
+                Location pt1 = new Location(Bukkit.getWorld((String) l1.get("world")), ((Long) l1.get("x")).doubleValue(), ((Long) l1.get("y")).doubleValue(), ((Long) l1.get("z")).doubleValue());
+                Location pt2 = new Location(Bukkit.getWorld((String) l2.get("world")), ((Long) l2.get("x")).doubleValue(), ((Long) l2.get("y")).doubleValue(), ((Long) l2.get("z")).doubleValue());
+                Location spawn = new Location(Bukkit.getWorld((String) spwn.get("world")), ((Long) spwn.get("x")).doubleValue(), ((Long) spwn.get("y")).doubleValue(), ((Long) spwn.get("z")).doubleValue(), ((Double) spwn.get("yaw")).floatValue(), ((Double) spwn.get("pitch")).floatValue());
+                Arenas.registerLobby(new Lobby((String) array.get("for"), pt1, pt2, spawn));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (ArenaNotFoundException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String formatJson(String json) {
         StringBuilder sb = new StringBuilder();
         char newline = '\n';
         int indent = 0; //current indent level
