@@ -1,7 +1,9 @@
 package me.mrkirby153.plugins.ThePlague.arena;
 
 import me.mrkirby153.plugins.ThePlague.ThePlague;
+import me.mrkirby153.plugins.ThePlague.utils.ChatHelper;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -19,7 +21,7 @@ public class Arena {
     private Location l1;
     private Location l2;
     private World world;
-    private ArrayList<Player> playersInGame = new ArrayList<Player>();
+    private ArrayList<String> playersInGame = new ArrayList<String>();
 
     private ArrayList<Location> uninfedtedSpawnLocations = new ArrayList<Location>();
 
@@ -91,5 +93,15 @@ public class Arena {
 
     public Location getPt2() {
         return l2;
+    }
+
+    public void join(Player p) {
+        //TODO: Save inventory
+        if(Arenas.findLobbyForArena(this) != null) {
+            p.teleport(Arenas.findLobbyForArena(this).getSpawn());
+            this.playersInGame.add(p.getName());
+        }else {
+            ChatHelper.sendToPlayer(p, ChatColor.RED+"That arena is missing a lobby");
+        }
     }
 }
