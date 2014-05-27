@@ -8,6 +8,8 @@ import me.mrkirby153.plugins.ThePlague.command.arena.CommandSelect;
 import me.mrkirby153.plugins.ThePlague.command.game.CommandJoin;
 import me.mrkirby153.plugins.ThePlague.command.general.CommandHelp;
 import me.mrkirby153.plugins.ThePlague.listeners.ArenaListener;
+import me.mrkirby153.plugins.ThePlague.listeners.CreationListener;
+import me.mrkirby153.plugins.ThePlague.signs.SignUpdater;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ThePlague extends JavaPlugin {
@@ -23,6 +25,8 @@ public class ThePlague extends JavaPlugin {
         getCommand("theplague").setExecutor(new CmdExecutor());
 
         getServer().getPluginManager().registerEvents(new ArenaListener(), this);
+        getServer().getPluginManager().registerEvents(new CreationListener(), this);
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, new SignUpdater(), 10L, 10L);
 
         ArenaUtils.loadAllArenas();
         ArenaUtils.loadAllLobbies();

@@ -104,4 +104,12 @@ public class Arena {
             ChatHelper.sendToPlayer(p, ChatColor.RED+"That arena is missing a lobby");
         }
     }
+
+    public ArenaState getState() {
+        return state;
+    }
+
+    public void setState(ArenaState state) {
+        this.state = state;
+    }
 }
