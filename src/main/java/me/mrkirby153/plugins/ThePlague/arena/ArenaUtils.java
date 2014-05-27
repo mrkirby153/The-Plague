@@ -160,6 +160,7 @@ public class ArenaUtils {
             pt2.put("yaw", arena.getPt2().getYaw());
             newArena.put("pt2", pt2);
             newArena.put("world", arena.getPt1().getWorld().getName());
+            newArena.put("state", arena.getState().toString());
             jsonObject.put(arena.getName(), newArena);
             FileWriter file = new FileWriter(arenas);
             file.write(formatJson(jsonObject.toJSONString()));
@@ -196,7 +197,9 @@ public class ArenaUtils {
                     continue;
                 Location pt1 = new Location(Bukkit.getWorld(world), ((Long) l1.get("x")).doubleValue(), ((Long) l1.get("y")).doubleValue(), ((Long) l1.get("z")).doubleValue());
                 Location pt2 = new Location(Bukkit.getWorld(world), ((Long) l2.get("x")).doubleValue(), ((Long) l2.get("y")).doubleValue(), ((Long) l2.get("z")).doubleValue());
-                Arenas.registerArena(new Arena(key, pt1, pt2, world));
+                Arena a = new Arena(key, pt1, pt2, world);
+                a.setState(ArenaState.valueOf((String) array.get("state")));
+                Arenas.registerArena(a);
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -49,10 +49,13 @@ public class CommandCreate extends BaseCommand {
                     return;
                 }
                 ArenaCreator ac = Arenas.findCreatorByName(p.getName());
-                Arena test = new Arena("test", ac.getPt1(), ac.getPt2(), ac.getPt1().getWorld());
-                test.saveArenaToFile();
-                test.addUninfectedSpawn(p.getLocation());
-                test.saveRespawnData();
+                Arena arena = ac.getSelectedArena();
+                if (arena == null) {
+                    ChatHelper.sendToPlayer(p, ChatColor.RED + "Your selected arena does not exist!");
+                    return;
+                }
+                arena.addUninfectedSpawn(p.getLocation());
+                arena.saveRespawnData();
             }
             if (args[0].equalsIgnoreCase("lobby")) {
                 if (!(sender instanceof Player)) {
@@ -109,7 +112,7 @@ public class CommandCreate extends BaseCommand {
                 Lobby lobby = Arenas.findLobbyForArena(selectedArena);
                 lobby.setSpawn(currentLoc);
                 lobby.update();
-                ChatHelper.sendToPlayer(p, ChatColor.GREEN+"Set lobby spawn to your location!");
+                ChatHelper.sendToPlayer(p, ChatColor.GREEN + "Set lobby spawn to your location!");
 
             }
         }
