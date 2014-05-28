@@ -224,7 +224,6 @@ public class ArenaUtils {
                 JSONObject spwn = (JSONObject) array.get("spawn");
                 if (Bukkit.getWorld((String) l1.get("world")) == null || Bukkit.getWorld((String) l2.get("world")) == null)
                     continue;
-                System.out.println(spwn.get("yaw").getClass().getSimpleName());
                 Location pt1 = new Location(Bukkit.getWorld((String) l1.get("world")), ((Long) l1.get("x")).doubleValue(), ((Long) l1.get("y")).doubleValue(), ((Long) l1.get("z")).doubleValue());
                 Location pt2 = new Location(Bukkit.getWorld((String) l2.get("world")), ((Long) l2.get("x")).doubleValue(), ((Long) l2.get("y")).doubleValue(), ((Long) l2.get("z")).doubleValue());
                 Location spawn = new Location(Bukkit.getWorld((String) spwn.get("world")), ((Long) spwn.get("x")).doubleValue(), ((Long) spwn.get("y")).doubleValue(), ((Long) spwn.get("z")).doubleValue(), ((Double) spwn.get("yaw")).floatValue(), ((Double) spwn.get("pitch")).floatValue());
