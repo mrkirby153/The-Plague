@@ -76,4 +76,8 @@ public class ArenaSign {
         }
         sign.update();
     }
+
+    public Arena getFor() {
+        return forArena;
+    }
 }

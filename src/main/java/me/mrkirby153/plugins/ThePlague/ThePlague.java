@@ -11,6 +11,7 @@ import me.mrkirby153.plugins.ThePlague.command.general.CommandHelp;
 import me.mrkirby153.plugins.ThePlague.listeners.ArenaListener;
 import me.mrkirby153.plugins.ThePlague.listeners.CreationListener;
 import me.mrkirby153.plugins.ThePlague.signs.SignUpdater;
+import me.mrkirby153.plugins.ThePlague.signs.Signs;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ThePlague extends JavaPlugin {
@@ -31,6 +32,7 @@ public class ThePlague extends JavaPlugin {
 
         ArenaUtils.loadAllArenas();
         ArenaUtils.loadAllLobbies();
+        Signs.loadSignsFromFile();
         Commands.registerComamnd(new CommandHelp());
         Commands.registerComamnd(new CommandCreate());
         Commands.registerComamnd(new CommandSelect());
