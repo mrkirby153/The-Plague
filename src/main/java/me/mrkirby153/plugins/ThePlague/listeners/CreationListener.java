@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 
 public class CreationListener implements Listener {
@@ -28,5 +29,14 @@ public class CreationListener implements Listener {
                 }
             }
     }
+
+    @EventHandler
+    public void onSignBreak(BlockBreakEvent event) {
+        if (Signs.findSignFromLocation(event.getBlock().getLocation()) == null)
+            return;
+        if (event.getPlayer().hasPermission("theplague.arena.signBreak"))
+            Signs.removeSign(Signs.findSignFromLocation(event.getBlock().getLocation()));
+        else
+            event.setCancelled(true);
     }
 }
