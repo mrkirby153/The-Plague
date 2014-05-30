@@ -25,7 +25,7 @@ public class Signs {
 
     public static ArenaSign findSignFromLocation(Location location) {
         for (ArenaSign as : arenaSigns) {
-            if (as.getLocation() == location)
+            if (as.getLocation().equals(location))
                 return as;
         }
         return null;
@@ -43,7 +43,7 @@ public class Signs {
 
     public static void saveSignsToFile() {
         try {
-            File file = new File(ThePlague.instance().getDataFolder().getAbsolutePath() + File.separator + "data" + File.separator + "signs");
+            File file = new File(ThePlague.instance().getDataFolder().getAbsolutePath() + File.separator + "data" + File.separator + "signs.arena-signs");
             if (!file.exists()) {
                 file.createNewFile();
             }
@@ -51,7 +51,7 @@ public class Signs {
             for (ArenaSign s : arenaSigns) {
                 Location l = s.getLocation();
                 Arena forArena = s.getFor();
-                writer.write(String.format("%s:%s:%s:%s:%s", forArena.getName(), l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName()));
+                writer.write(String.format("%s:%s:%s:%s:%s", forArena.getName(), l.getBlockX(), l.getBlockY(), l.getBlockZ(), l.getWorld().getName()) + "\n");
             }
             writer.flush();
             writer.close();
@@ -62,7 +62,7 @@ public class Signs {
 
     public static void loadSignsFromFile() {
         try {
-            File file = new File(ThePlague.instance().getDataFolder().getAbsolutePath() + File.separator + "data" + File.separator + "signs");
+            File file = new File(ThePlague.instance().getDataFolder().getAbsolutePath() + File.separator + "data" + File.separator + "signs.arena-signs");
             if (!file.exists())
                 return;
             BufferedReader br = new BufferedReader(new FileReader(file));
