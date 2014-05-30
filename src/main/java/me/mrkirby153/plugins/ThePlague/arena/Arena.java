@@ -91,7 +91,7 @@ public class Arena {
             if (!spawns.exists())
                 return;
             BufferedReader br = new BufferedReader(new FileReader(spawns));
-            if(br.readLine() == null)
+            if (br.readLine() == null)
                 return;
             JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader(spawns));
 
@@ -132,5 +132,13 @@ public class Arena {
 
     public void setState(ArenaState state) {
         this.state = state;
+    }
+
+    public void gameEnd(String winner){
+
+    }
+
+    public String getWinner(){
+        return "Nobody";
     }
 }
