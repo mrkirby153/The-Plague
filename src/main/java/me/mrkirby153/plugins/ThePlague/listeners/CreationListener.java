@@ -32,8 +32,9 @@ public class CreationListener implements Listener {
 
     @EventHandler
     public void onSignBreak(BlockBreakEvent event) {
-        if (Signs.findSignFromLocation(event.getBlock().getLocation()) == null)
+        if (Signs.findSignFromLocation(event.getBlock().getLocation()) == null) {
             return;
+        }
         if (event.getPlayer().hasPermission("theplague.arena.signBreak"))
             Signs.removeSign(Signs.findSignFromLocation(event.getBlock().getLocation()));
         else
