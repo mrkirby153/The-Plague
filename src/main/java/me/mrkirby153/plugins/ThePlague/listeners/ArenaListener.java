@@ -57,6 +57,21 @@ public class ArenaListener implements Listener {
     }
 
     @EventHandler
+    public void onSignClick(PlayerInteractEvent event){
+        if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR)){
+            if(!event.getClickedBlock().getType().toString().contains("SIGN"))
+                return;
+            ArenaSign a = Signs.findSignFromLocation(event.getClickedBlock().getLocation());
+            if(a == null)
+                return;
+            if(Arenas.getCurrentArena(event.getPlayer()) != null){
+                ChatHelper.sendToPlayer(event.getPlayer(), ChatColor.RED+"You are already in an arena! Leave with /theplague leave");
+                return;
+            }
+            a.getFor().join(event.getPlayer());
+        }
+    }
+
     @SuppressWarnings("deprecation")
     public void explode(EntityExplodeEvent event){
         int offset = 5;
