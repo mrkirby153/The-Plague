@@ -35,7 +35,7 @@ public class ArenaSign {
                 break;
             case WAITING:
                 sign.setLine(0, ChatColor.GREEN + "[Join]");
-                sign.setLine(1, String.format("§b%s§0/§1%s", "--", "--"));
+                sign.setLine(1, String.format("§b%s§0/§1%s", forArena.playerCount(), "--"));
                 sign.setLine(2, ChatColor.GREEN + forArena.getName());
                 sign.setLine(3, ChatColor.UNDERLINE + "Join");
                 break;
