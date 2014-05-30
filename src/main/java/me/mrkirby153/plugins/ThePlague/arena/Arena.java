@@ -2,11 +2,10 @@ package me.mrkirby153.plugins.ThePlague.arena;
 
 import me.mrkirby153.plugins.ThePlague.ThePlague;
 import me.mrkirby153.plugins.ThePlague.utils.ChatHelper;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -16,16 +15,23 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Arena {
+public class Arena extends BukkitRunnable {
     private String name;
     private Location l1;
     private Location l2;
     private World world;
     private ArrayList<String> playersInGame = new ArrayList<String>();
+    private ArrayList<String> infectedPlayers = new ArrayList<String>();
 
     private ArrayList<Location> uninfedtedSpawnLocations = new ArrayList<Location>();
     private Location infectedSpawn;
     private ArenaState state = ArenaState.DISABLED;
+    private int secondsLeft = 0;
+    private String winner = "Nobody";
+    private int maxPlayers = 10;
+
+    private boolean active = false;
+    private ScoreboardManager manager = Bukkit.getScoreboardManager();
 
     public Arena(String name, Location pt1, Location pt2, World world) {
         this.name = name;
@@ -76,6 +82,15 @@ public class Arena {
         saveRespawnData();
     }
 
+    public void setMaxPlayers(int players){
+        this.maxPlayers = players;
+        ArenaUtils.saveArena(this.getName());
+    }
+
+    public int getMaxPlayers(){
+        return this.maxPlayers;
+    }
+
     public Location removeUninfectedSpawn(int id) {
         return uninfedtedSpawnLocations.remove(id);
     }
@@ -120,7 +135,12 @@ public class Arena {
         //TODO: Save inventory
         if (Arenas.findLobbyForArena(this) != null) {
             p.teleport(Arenas.findLobbyForArena(this).getSpawn());
-            this.playersInGame.add(p.getName());
+            if (!this.playersInGame.contains(p.getName()))
+                this.playersInGame.add(p.getName());
+            for (String players : this.playersInGame) {
+                ChatHelper.sendToPlayer(Bukkit.getPlayerExact(players), ChatColor.GOLD + players + " has joined!");
+                Bukkit.getPlayerExact(players).playSound(Bukkit.getPlayerExact(players).getLocation(), Sound.NOTE_PLING, 1F, 0.12F);
+            }
         } else {
             ChatHelper.sendToPlayer(p, ChatColor.RED + "That arena is missing a lobby");
         }
@@ -134,8 +154,9 @@ public class Arena {
         this.state = state;
     }
 
-    public void gameEnd(String winner){
 
+    public String getWinner() {
+        return "Nobody";
     }
 
     public void start() {
