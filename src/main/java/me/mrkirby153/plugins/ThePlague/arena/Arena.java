@@ -138,7 +138,98 @@ public class Arena {
 
     }
 
-    public String getWinner(){
-        return "Nobody";
+    public void start() {
+        this.secondsLeft = 20;
+        setState(ArenaState.RUNNING);
+        active = true;
+    }
+
+    public void run() {
+        switch (this.state) {
+            case WAITING:
+                lobbyScoreboard();
+                break;
+            case RUNNING:
+                gameScoreboard();
+                break;
+        }
+        if (!active)
+            return;
+        // Update scoreboards
+
+        if (this.secondsLeft >= 0) {
+            if (playersInGame.size() == 0) {
+                System.out.println("No players in game");
+                setState(ArenaState.WAITING);
+                ArenaUtils.loadBlocksFromFile(this);
+                active = false;
+                return;
+            }
+        } else {
+            if (this.state == ArenaState.RUNNING) {
+                setState(ArenaState.ENDED);
+                this.secondsLeft = 5;
+                return;
+            }
+            if (this.state == ArenaState.ENDED) {
+                setState(ArenaState.WAITING);
+                ArenaUtils.loadBlocksFromFile(this);
+                active = false;
+                return;
+            }
+        }
+
+        /*if (infectedPlayers.size() == playersInGame.size() - 1) {
+            ArrayList<String> players = (ArrayList<String>) playersInGame.clone();
+            for(String playerName : infectedPlayers){
+                players.remove(playerName);
+            }
+            this.winner = players.get(0);
+            setState(ArenaState.ENDED);
+        }*/
+        System.out.println(secondsLeft);
+        secondsLeft--;
+    }
+
+    @SuppressWarnings("deprecation")
+    private void gameScoreboard() {
+
+    }
+
+    private void lobbyScoreboard() {
+        Scoreboard board = manager.getNewScoreboard();
+        Objective o = board.registerNewObjective("game_score", "dummy");
+        o.setDisplayName("§b§lThePlague");
+        o.setDisplaySlot(DisplaySlot.SIDEBAR);
+        Score playerHeader = o.getScore(ChatColor.YELLOW + "Players:");
+        playerHeader.setScore(5);
+        Score playerCount = o.getScore("  " + ChatColor.GOLD + this.playersInGame.size() + "/--");
+        playerCount.setScore(4);
+        Score spacer1 = o.getScore(" ");
+        spacer1.setScore(3);
+        Score mapHeader = o.getScore(ChatColor.LIGHT_PURPLE + "Arena: ");
+        mapHeader.setScore(2);
+        Score map = o.getScore("   " + ChatColor.GREEN + this.getName());
+        map.setScore(1);
+        for (String playerName : playersInGame) {
+            Bukkit.getPlayerExact(playerName).setScoreboard(board);
+        }
+    }
+
+    public int playerCount() {
+        return this.playersInGame.size();
+    }
+
+    public ArrayList<String> getPlayers() {
+        return this.playersInGame;
+    }
+
+    public void leave(Player p) {
+        for (String players : this.playersInGame) {
+            ChatHelper.sendToPlayer(Bukkit.getPlayerExact(players), ChatColor.GOLD + players + " has left!");
+            Bukkit.getPlayerExact(players).playSound(Bukkit.getPlayerExact(players).getLocation(), Sound.NOTE_BASS, 100F, 0.2F);
+        }
+        this.playersInGame.remove(p.getName());
+        p.setScoreboard(manager.getNewScoreboard());
     }
 }
