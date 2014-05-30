@@ -16,7 +16,7 @@ public class ArenaSign {
         this.forArena = forArena;
     }
 
-    public Location getLocation(){
+    public Location getLocation() {
         return this.location;
     }
 
@@ -59,13 +59,13 @@ public class ArenaSign {
                 break;
             case ENDED:
                 sign.setLine(0, ChatColor.RED + "█████████");
-                sign.setLine(1, ChatColor.GOLD + "%P_NAME%");
+                sign.setLine(1, ChatColor.GOLD + forArena.getWinner());
                 sign.setLine(2, ChatColor.GOLD + "has won!");
                 sign.setLine(3, ChatColor.RED + "█████████");
                 break;
             case RESETTING:
                 sign.setLine(0, ChatColor.RED + "[Resetting]");
-                sign.setLine(1, "000%");
+                sign.setLine(1, "");
                 sign.setLine(2, ChatColor.WHITE + "Please wait...");
                 sign.setLine(3, "");
                 break;
