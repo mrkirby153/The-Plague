@@ -119,6 +119,7 @@ public class ArenaUtils {
                     continue;
                 final Location l = new Location(w, x, y, z);
                 if (l.getBlock().equals(Material.AIR)) {
+                    l.getBlock().getWorld().playEffect(l, Effect.STEP_SOUND, l.getBlock().getType());
                     l.getBlock().setType(Material.AIR);
                     continue;
                 }
@@ -206,6 +207,9 @@ public class ArenaUtils {
                 Arena a = new Arena(key, pt1, pt2, world);
                 a.setState(ArenaState.valueOf((String) array.get("state")));
                 Arenas.registerArena(a);
+                a.runTaskTimer(ThePlague.instance(), 20L, 20L);
+                if (array.get("maxPlayers") != null)
+                    a.setMaxPlayers(Integer.parseInt(array.get("maxPlayers").toString()));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -300,7 +304,7 @@ public class ArenaUtils {
         return false;
     }
 
-    public static boolean isProtectedLobby(Location loc){
+    public static boolean isProtectedLobby(Location loc) {
         Vector vector = loc.toVector();
         ArrayList<Lobby> lobby = Arenas.lobbies;
         for (Lobby l : lobby) {
