@@ -109,4 +109,12 @@ public class Arenas {
             constructCreateStick();
         return creationStick;
     }
+
+    public static Arena getCurrentArena(Player p) {
+        for(Arena a : arenas){
+            if(a.getPlayers().contains(p.getName()))
+                return a;
+        }
+        return null;
+    }
 }
