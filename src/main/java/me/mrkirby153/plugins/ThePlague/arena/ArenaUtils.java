@@ -311,4 +311,48 @@ public class ArenaUtils {
         }
         return false;
     }
+
+    public static void saveArena(String name) {
+        try {
+            File arenas = new File(dataPath + "arenas.json");
+            if (!arenas.exists())
+                arenas.createNewFile();
+            Arena arena = Arenas.findByName(name);
+            // Load json from file.
+            // Check if file is empty
+            BufferedReader br = new BufferedReader(new FileReader(arenas));
+            JSONObject jsonObject;
+            if (br.readLine() != null)
+                jsonObject = (JSONObject) parser.parse(new FileReader(arenas));
+            else
+                jsonObject = new JSONObject();
+            JSONObject newArena = new JSONObject();
+            JSONObject pt1 = new JSONObject();
+            pt1.put("x", arena.getPt1().getBlockX());
+            pt1.put("y", arena.getPt1().getBlockY());
+            pt1.put("z", arena.getPt1().getBlockZ());
+            pt1.put("pitch", arena.getPt1().getPitch());
+            pt1.put("yaw", arena.getPt1().getYaw());
+            newArena.put("pt1", pt1);
+            JSONObject pt2 = new JSONObject();
+            pt2.put("x", arena.getPt2().getBlockX());
+            pt2.put("y", arena.getPt2().getBlockY());
+            pt2.put("z", arena.getPt2().getBlockZ());
+            pt2.put("pitch", arena.getPt2().getPitch());
+            pt2.put("yaw", arena.getPt2().getYaw());
+            newArena.put("pt2", pt2);
+            newArena.put("world", arena.getPt1().getWorld().getName());
+            newArena.put("state", arena.getState().toString());
+            newArena.put("maxPlayers", arena.getMaxPlayers());
+            jsonObject.put(arena.getName(), newArena);
+            FileWriter file = new FileWriter(arenas);
+            file.write(formatJson(jsonObject.toJSONString()));
+            file.flush();
+            file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 }

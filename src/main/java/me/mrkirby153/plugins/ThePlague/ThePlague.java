@@ -4,6 +4,7 @@ import me.mrkirby153.plugins.ThePlague.arena.ArenaUtils;
 import me.mrkirby153.plugins.ThePlague.command.CmdExecutor;
 import me.mrkirby153.plugins.ThePlague.command.Commands;
 import me.mrkirby153.plugins.ThePlague.command.arena.CommandCreate;
+import me.mrkirby153.plugins.ThePlague.command.arena.CommandReSave;
 import me.mrkirby153.plugins.ThePlague.command.arena.CommandRestore;
 import me.mrkirby153.plugins.ThePlague.command.arena.CommandSelect;
 import me.mrkirby153.plugins.ThePlague.command.game.CommandJoin;
@@ -42,6 +43,7 @@ public class ThePlague extends JavaPlugin {
         Commands.registerComamnd(new CommandState());
         Commands.registerComamnd(new CommandRestore());
         Commands.registerComamnd(new CommandLeave());
+        Commands.registerComamnd(new CommandReSave());
     }
 
     @Override
