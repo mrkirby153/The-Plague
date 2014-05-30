@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 public class CommandJoin extends BaseCommand {
 
     public CommandJoin(){
-        super("join", "The command used to join an arena", "theplague.game.join");
+        super("join", "The command used to join an arena");
     }
     @Override
     public void execute(CommandSender sender, String[] args) {
