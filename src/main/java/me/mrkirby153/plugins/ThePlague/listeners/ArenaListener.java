@@ -72,22 +72,50 @@ public class ArenaListener implements Listener {
         }
     }
 
+    /*@EventHandler
     @SuppressWarnings("deprecation")
     public void explode(EntityExplodeEvent event){
         int offset = 5;
         int inc = 5;
-        for(Block b : event.blockList()){
-            final Block block = b;
-            if(ArenaUtils.isProtected(b.getLocation())){
+        for(final Block b : event.blockList()){
+            if(!ArenaUtils.isProtected(b.getLocation()) && ArenaUtils.isProtected(event.getLocation())){
+                System.out.println("Ding!");
                 new BukkitRunnable(){
                     public void run() {
-                        Location l = block.getLocation();
-                        l.getBlock().setType(block.getType());
-                        l.getBlock().setData(block.getData());
-                       l.getWorld().playEffect(block.getLocation(), Effect.STEP_SOUND, block.getType());
+                        Location l = b.getLocation();
+                        l.getBlock().setType(b.getType());
                     }
-                }.runTaskLater(ThePlague.instance(), offset);
-                offset += inc;
+                }.runTaskLater(ThePlague.instance(), 20L);
+            }
+        }
+    }*/
+    @EventHandler
+    @SuppressWarnings("deprecation")
+    public void onExplode(EntityExplodeEvent event) {
+        for (final Block block : event.blockList()) {
+            final Material blockType = block.getType();
+            final byte data = block.getData();
+            if (ArenaUtils.isProtected(block.getLocation())) {
+                if (block.getType() == Material.TNT)
+                    continue;
+                new BukkitRunnable() {
+                    public void run() {
+                        block.setType(blockType);
+                        block.setData(data);
+                        block.getWorld().playEffect(block.getLocation(), Effect.STEP_SOUND, block.getType());
+                    }
+                }.runTaskLater(ThePlague.instance(), 60);
+            } else if (ArenaUtils.isProtected(event.getLocation())) {
+
+                if (block.getType() == Material.TNT)
+                    continue;
+                new BukkitRunnable() {
+                    public void run() {
+                        block.setType(blockType);
+                        block.setData(data);
+                        block.getWorld().playEffect(block.getLocation(), Effect.STEP_SOUND, block.getType());
+                    }
+                }.runTaskLater(ThePlague.instance(), 40);
             }
         }
     }
