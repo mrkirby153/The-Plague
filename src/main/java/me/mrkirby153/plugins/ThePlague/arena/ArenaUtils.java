@@ -3,10 +3,7 @@ package me.mrkirby153.plugins.ThePlague.arena;
 import me.mrkirby153.plugins.ThePlague.ThePlague;
 import me.mrkirby153.plugins.ThePlague.arena.lobby.Lobby;
 import me.mrkirby153.plugins.ThePlague.utils.ChatHelper;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 import org.json.simple.JSONObject;
@@ -91,11 +88,12 @@ public class ArenaUtils {
 
     }
 
-    public static void loadBlocksFromFile(Arena arena) {
+    public static void loadBlocksFromFile(final Arena arena) {
         File arenaBlocksFile = new File(dataPath + arena.getName() + File.separator + arena.getName() + ".arena-blocks");
+        final ArenaState prevState = arena.getState();
+        arena.setState(ArenaState.RESETTING);
         if (!arenaBlocksFile.exists())
             return;
-        ChatHelper.sendAdminMessage("Loading Arena From File...");
         try {
             BufferedReader br = new BufferedReader(new FileReader(arenaBlocksFile));
             String line;
@@ -104,7 +102,7 @@ public class ArenaUtils {
                 if (parts.length != 2)
                     continue;
                 String[] coords = parts[0].split(",");
-                String[] block = parts[1].split(",");
+                final String[] block = parts[1].split(",");
                 if (coords.length != 4 || block.length != 2)
                     continue;
                 World w;
@@ -116,15 +114,23 @@ public class ArenaUtils {
                 int y = Integer.parseInt(coords[2]);
                 int z = Integer.parseInt(coords[3]);
 
-                Material type = Material.valueOf(block[0]);
+                final Material type = Material.valueOf(block[0]);
                 if (type == null)
                     continue;
-                Location l = new Location(w, x, y, z);
+                final Location l = new Location(w, x, y, z);
+                if (l.getBlock().equals(Material.AIR)) {
+                    l.getBlock().setType(Material.AIR);
+                    continue;
+                }
+                if (l.getBlock().getType().equals(type) && l.getBlock().getData() == (byte) Integer.parseInt(block[1])) {
+                    continue;
+                }
                 l.getBlock().setType(type);
                 l.getBlock().setData((byte) Integer.parseInt(block[1]));
+                l.getBlock().getWorld().playEffect(l.getBlock().getLocation(), Effect.STEP_SOUND, l.getBlock().getType());
             }
+            arena.setState(prevState);
             br.close();
-            ChatHelper.sendAdminMessage("Done!");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -284,6 +290,18 @@ public class ArenaUtils {
             if (vector.isInAABB(Vector.getMinimum(pt1.toVector(), pt2.toVector()), Vector.getMaximum(pt1.toVector(), pt2.toVector())))
                 return true;
         }
+        ArrayList<Lobby> lobby = Arenas.lobbies;
+        for (Lobby l : lobby) {
+            Location pt1 = l.getPt1();
+            Location pt2 = l.getPt2();
+            if (vector.isInAABB(Vector.getMinimum(pt1.toVector(), pt2.toVector()), Vector.getMaximum(pt1.toVector(), pt2.toVector())))
+                return true;
+        }
+        return false;
+    }
+
+    public static boolean isProtectedLobby(Location loc){
+        Vector vector = loc.toVector();
         ArrayList<Lobby> lobby = Arenas.lobbies;
         for (Lobby l : lobby) {
             Location pt1 = l.getPt1();
