@@ -2,6 +2,7 @@ package me.mrkirby153.plugins.ThePlague.command.game;
 
 import me.mrkirby153.plugins.ThePlague.arena.Arena;
 import me.mrkirby153.plugins.ThePlague.arena.ArenaState;
+import me.mrkirby153.plugins.ThePlague.arena.ArenaUtils;
 import me.mrkirby153.plugins.ThePlague.arena.Arenas;
 import me.mrkirby153.plugins.ThePlague.command.BaseCommand;
 import me.mrkirby153.plugins.ThePlague.utils.ChatHelper;
@@ -19,8 +20,8 @@ public class CommandState extends BaseCommand {
             ChatHelper.send(sender, ChatColor.BLUE + "Acceptable states are: " + ChatColor.GRAY + getStates());
             return;
         }
-        if(args.length == 1){
-            ChatHelper.send(sender, ChatColor.GOLD+"Please provide an arena name!");
+        if (args.length == 1) {
+            ChatHelper.send(sender, ChatColor.GOLD + "Please provide an arena name!");
             return;
         }
         if (args.length == 2) {
@@ -37,7 +38,7 @@ public class CommandState extends BaseCommand {
                 ChatHelper.send(sender, ChatColor.BLUE + "Acceptable states are: " + ChatColor.GRAY + getStates());
             }
 
-            a.setState(ArenaState.valueOf(state));
+            update(ArenaState.valueOf(state), Arenas.findByName(arena));
             ChatHelper.sendAdminMessage(sender.getName() + " has forced arena " + arena + " into state " + state);
             ChatHelper.send(sender, ChatColor.RED + arena + " is now in state " + ChatColor.GOLD + state);
             return;
@@ -56,5 +57,17 @@ public class CommandState extends BaseCommand {
         if (sb.toString().isEmpty())
             return "None";
         return sb.toString().substring(0, sb.toString().length() - 2);
+    }
+
+    private void update(ArenaState state, Arena arena) {
+        arena.setState(state);
+        switch (state) {
+            case RESETTING:
+                ArenaUtils.loadBlocksFromFile(arena);
+                break;
+            case STARTING:
+                arena.start();
+                break;
+        }
     }
 }
