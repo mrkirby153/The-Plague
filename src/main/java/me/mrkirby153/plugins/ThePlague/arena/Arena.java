@@ -2,6 +2,7 @@ package me.mrkirby153.plugins.ThePlague.arena;
 
 import me.mrkirby153.plugins.ThePlague.ThePlague;
 import me.mrkirby153.plugins.ThePlague.utils.ChatHelper;
+import me.mrkirby153.plugins.ThePlague.utils.InventoryHelper;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -137,6 +138,7 @@ public class Arena extends BukkitRunnable {
             p.teleport(Arenas.findLobbyForArena(this).getSpawn());
             if (!this.playersInGame.contains(p.getName()))
                 this.playersInGame.add(p.getName());
+            InventoryHelper.save(p);
             for (String players : this.playersInGame) {
                 ChatHelper.sendToPlayer(Bukkit.getPlayerExact(players), ChatColor.GOLD + players + " has joined!");
                 Bukkit.getPlayerExact(players).playSound(Bukkit.getPlayerExact(players).getLocation(), Sound.NOTE_PLING, 1F, 0.12F);
