@@ -77,23 +77,6 @@ public class ArenaListener implements Listener {
         }
     }
 
-    /*@EventHandler
-    @SuppressWarnings("deprecation")
-    public void explode(EntityExplodeEvent event){
-        int offset = 5;
-        int inc = 5;
-        for(final Block b : event.blockList()){
-            if(!ArenaUtils.isProtected(b.getLocation()) && ArenaUtils.isProtected(event.getLocation())){
-                System.out.println("Ding!");
-                new BukkitRunnable(){
-                    public void run() {
-                        Location l = b.getLocation();
-                        l.getBlock().setType(b.getType());
-                    }
-                }.runTaskLater(ThePlague.instance(), 20L);
-            }
-        }
-    }*/
     @EventHandler
     @SuppressWarnings("deprecation")
     public void onExplode(EntityExplodeEvent event) {
