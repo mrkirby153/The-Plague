@@ -210,7 +210,6 @@ public class Arena extends BukkitRunnable {
             this.winner = players.get(0);
             setState(ArenaState.ENDED);
         }*/
-        System.out.println(secondsLeft);
         secondsLeft--;
     }
 
