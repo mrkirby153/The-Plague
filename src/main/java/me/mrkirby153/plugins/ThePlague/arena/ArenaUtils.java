@@ -236,6 +236,8 @@ public class ArenaUtils {
                     continue;
                 Location pt1 = new Location(Bukkit.getWorld((String) l1.get("world")), ((Long) l1.get("x")).doubleValue(), ((Long) l1.get("y")).doubleValue(), ((Long) l1.get("z")).doubleValue());
                 Location pt2 = new Location(Bukkit.getWorld((String) l2.get("world")), ((Long) l2.get("x")).doubleValue(), ((Long) l2.get("y")).doubleValue(), ((Long) l2.get("z")).doubleValue());
+                if(spwn == null)
+                    continue;
                 Location spawn = new Location(Bukkit.getWorld((String) spwn.get("world")), ((Long) spwn.get("x")).doubleValue(), ((Long) spwn.get("y")).doubleValue(), ((Long) spwn.get("z")).doubleValue(), ((Double) spwn.get("yaw")).floatValue(), ((Double) spwn.get("pitch")).floatValue());
                 Arenas.registerLobby(new Lobby((String) array.get("for"), pt1, pt2, spawn));
             }
