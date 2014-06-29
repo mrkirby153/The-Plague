@@ -1,43 +1,58 @@
 package me.mrkirby153.plugins.ThePlague.command;
 
-import me.mrkirby153.plugins.ThePlague.ThePlague;
-
+import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.List;
 
 public class Commands {
 
-    private static ArrayList<BaseCommand> commands = new ArrayList<BaseCommand>();
-    private static HashMap<String, BaseCommand> aliases = new HashMap<String, BaseCommand>();
+    public static ArrayList<Class> handlers = new ArrayList<Class>();
 
-    public static void registerComamnd(BaseCommand command){
-        if(!commands.contains(command)){
-            commands.add(command);
-        } else {
-            ThePlague.instance().getLogger().warning("Attempted to register "+command.commandName()+" when it is already registered!");
-        }
+    public static void registerNewHandler(Class cmdClass) {
+        handlers.add(cmdClass);
     }
 
-    public static BaseCommand findByName(String name){
-        for(BaseCommand cmd : commands){
-            if(cmd.commandName().equalsIgnoreCase(name)){
-                    return cmd;
+    public static Method getExecutorMethod(String commandName){
+        for(Class c : handlers){
+            for(Method m : c.getMethods()){
+                if(m.isAnnotationPresent(Command.class)){
+                    Command cmd = m.getAnnotation(Command.class);
+                    if(cmd.name().equalsIgnoreCase(commandName) || isAlias(cmd.aliases(), commandName))
+                        return m;
+                }
             }
         }
         return null;
     }
 
-    public static void registerAlias(BaseCommand cmd, String alias){
-        aliases.put(alias, cmd);
+    public static Class getExecutorClass(String commandName){
+        for(Class c : handlers){
+            for(Method m : c.getMethods()){
+                if(m.isAnnotationPresent(Command.class)){
+                    Command cmd = m.getAnnotation(Command.class);
+                    if(cmd.name().equalsIgnoreCase(commandName) || isAlias(cmd.aliases(), commandName))
+                        return c;
+                }
+            }
+        }
+        return null;
     }
 
-    public static HashMap<String, BaseCommand> getAliases(){
-        return aliases;
+
+    private static boolean isAlias(String[] aliases, String commandName){
+        return toLowercase(Arrays.asList(aliases)).contains(commandName.toLowerCase());
     }
 
-    public static ArrayList<BaseCommand> commandList(){
-        return commands;
+    private static List<String> toLowercase(List<String> string){
+        String[] stringArray = string.toArray(new String[0]);
+        for(int i = 0; i <stringArray.length; i++){
+            stringArray[i] = stringArray[i].toLowerCase();
+        }
+        return Arrays.asList(stringArray);
     }
 
-
+    public static ArrayList<Class> getHandlers() {
+        return handlers;
+    }
 }

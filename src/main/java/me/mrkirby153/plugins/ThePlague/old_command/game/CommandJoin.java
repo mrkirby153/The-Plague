@@ -1,8 +1,8 @@
-package me.mrkirby153.plugins.ThePlague.command.game;
+package me.mrkirby153.plugins.ThePlague.old_command.game;
 
 import me.mrkirby153.plugins.ThePlague.arena.Arena;
 import me.mrkirby153.plugins.ThePlague.arena.Arenas;
-import me.mrkirby153.plugins.ThePlague.command.BaseCommand;
+import me.mrkirby153.plugins.ThePlague.old_command.BaseCommand;
 import me.mrkirby153.plugins.ThePlague.utils.ChatHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 public class CommandJoin extends BaseCommand {
 
     public CommandJoin(){
-        super("join", "The command used to join an arena");
+        super("join", "The old_command used to join an arena");
     }
     @Override
     public void execute(CommandSender sender, String[] args) {

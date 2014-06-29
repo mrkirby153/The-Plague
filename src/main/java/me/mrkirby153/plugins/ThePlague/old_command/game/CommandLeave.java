@@ -1,8 +1,8 @@
-package me.mrkirby153.plugins.ThePlague.command.game;
+package me.mrkirby153.plugins.ThePlague.old_command.game;
 
 import me.mrkirby153.plugins.ThePlague.arena.Arena;
 import me.mrkirby153.plugins.ThePlague.arena.Arenas;
-import me.mrkirby153.plugins.ThePlague.command.BaseCommand;
+import me.mrkirby153.plugins.ThePlague.old_command.BaseCommand;
 import me.mrkirby153.plugins.ThePlague.utils.ChatHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
