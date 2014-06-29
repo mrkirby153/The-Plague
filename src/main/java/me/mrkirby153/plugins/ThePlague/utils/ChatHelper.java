@@ -12,6 +12,7 @@ public class ChatHelper {
 
     private static ThePlague plugin = ThePlague.instance();
 
+    @Deprecated
     public static void sendToPlayer(Player p, String message) {
         if (p == null)
             return;
@@ -19,6 +20,7 @@ public class ChatHelper {
         p.sendMessage(String.format(msg, plugin.getName(), message));
     }
 
+    @Deprecated
     public static void sendToPlayer(String playerName, String message) {
         @SuppressWarnings("deprecation")
         Player p = Bukkit.getPlayerExact(playerName);
@@ -31,10 +33,13 @@ public class ChatHelper {
         plugin.getLogger().log(level, ChatColor.stripColor(message));
     }
 
+    @Deprecated
+
     public static void sendToConsole(String message) {
         plugin.getLogger().info(ChatColor.stripColor(message));
     }
 
+    @Deprecated
     public static void send(CommandSender sender, String message) {
         if (sender instanceof Player) {
             Player p = (Player) sender;
@@ -44,6 +49,7 @@ public class ChatHelper {
         }
     }
 
+    @Deprecated
     public static void sendAdminMessage(String message) {
         Bukkit.broadcast(ChatColor.ITALIC + "" + ChatColor.GRAY + "[ThePlague] " + message, "theplague.admin.messages");
     }

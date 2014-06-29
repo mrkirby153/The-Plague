@@ -2,7 +2,7 @@ package me.mrkirby153.plugins.ThePlague.arena;
 
 import me.mrkirby153.plugins.ThePlague.ThePlague;
 import me.mrkirby153.plugins.ThePlague.arena.lobby.Lobby;
-import me.mrkirby153.plugins.ThePlague.utils.ChatHelper;
+import me.mrkirby153.plugins.ThePlague.utils.MessageHelper;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
@@ -18,13 +18,13 @@ public class ArenaUtils {
     private static String dataPath = ThePlague.instance.getDataFolder().getAbsolutePath() + File.separator + "data" + File.separator;
 
     private static JSONParser parser = new JSONParser();
-
+    @SuppressWarnings("deprecation")
     public static void saveBlocksToFile(Arena arena) {
         // Loop through every block and save it to a file
         Location l1 = arena.getPt1();
         Location l2 = arena.getPt2();
         World world = arena.getPt1().getWorld();
-        ChatHelper.sendAdminMessage("Saving arena " + arena.getName() + " to file. May cause lag!");
+        MessageHelper.sendAdminMessage("arena.savingArena", arena.getName());
         File data = new File(ThePlague.instance().getDataFolder().getAbsolutePath() + File.separator + "data" + File.separator + arena.getName());
         if (!data.exists())
             data.mkdirs();
@@ -34,7 +34,7 @@ public class ArenaUtils {
             writer = new PrintWriter(arenaBlocksFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            ChatHelper.sendAdminMessage("Could not open file " + arenaBlocksFile.getAbsolutePath() + " [" + e.getMessage() + "]");
+            MessageHelper.sendMessage("arena.saveError", arenaBlocksFile.getAbsolutePath(), e.getMessage());
             return;
         }
         float startTime = System.currentTimeMillis();
@@ -84,10 +84,9 @@ public class ArenaUtils {
 
         long endTime = System.currentTimeMillis();
         float totalTime = (endTime - startTime) / 1000;
-        ChatHelper.sendAdminMessage(String.format("Saved %s blocks in %s seconds!", count, totalTime));
-
+            MessageHelper.sendAdminMessage("arena.saveComplete", count, totalTime);
     }
-
+    @SuppressWarnings("deprecation")
     public static void loadBlocksFromFile(final Arena arena) {
         File arenaBlocksFile = new File(dataPath + arena.getName() + File.separator + arena.getName() + ".arena-blocks");
         final ArenaState prevState = arena.getState();
@@ -318,6 +317,7 @@ public class ArenaUtils {
         return false;
     }
 
+    @SuppressWarnings("unchecked")
     public static void saveArena(String name) {
         try {
             File arenas = new File(dataPath + "arenas.json");
