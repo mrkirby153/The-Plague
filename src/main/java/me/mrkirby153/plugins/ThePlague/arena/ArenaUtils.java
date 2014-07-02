@@ -15,9 +15,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class ArenaUtils {
-    private static String dataPath = ThePlague.instance.getDataFolder().getAbsolutePath() + File.separator + "data" + File.separator;
+    private static String dataPath = ThePlague.instance().getDataFolder().getAbsolutePath() + File.separator + "data" + File.separator;
 
     private static JSONParser parser = new JSONParser();
+
     @SuppressWarnings("deprecation")
     public static void saveBlocksToFile(Arena arena) {
         // Loop through every block and save it to a file
@@ -84,8 +85,9 @@ public class ArenaUtils {
 
         long endTime = System.currentTimeMillis();
         float totalTime = (endTime - startTime) / 1000;
-            MessageHelper.sendAdminMessage("arena.saveComplete", count, totalTime);
+        MessageHelper.sendAdminMessage("arena.saveComplete", count, totalTime);
     }
+
     @SuppressWarnings("deprecation")
     public static void loadBlocksFromFile(final Arena arena) {
         File arenaBlocksFile = new File(dataPath + arena.getName() + File.separator + arena.getName() + ".arena-blocks");
@@ -235,9 +237,9 @@ public class ArenaUtils {
                     continue;
                 Location pt1 = new Location(Bukkit.getWorld((String) l1.get("world")), ((Long) l1.get("x")).doubleValue(), ((Long) l1.get("y")).doubleValue(), ((Long) l1.get("z")).doubleValue());
                 Location pt2 = new Location(Bukkit.getWorld((String) l2.get("world")), ((Long) l2.get("x")).doubleValue(), ((Long) l2.get("y")).doubleValue(), ((Long) l2.get("z")).doubleValue());
-                if(spwn == null)
-                    continue;
-                Location spawn = new Location(Bukkit.getWorld((String) spwn.get("world")), ((Long) spwn.get("x")).doubleValue(), ((Long) spwn.get("y")).doubleValue(), ((Long) spwn.get("z")).doubleValue(), ((Double) spwn.get("yaw")).floatValue(), ((Double) spwn.get("pitch")).floatValue());
+                Location spawn = null;
+                if (spwn != null)
+                    spawn = new Location(Bukkit.getWorld((String) spwn.get("world")), ((Long) spwn.get("x")).doubleValue(), ((Long) spwn.get("y")).doubleValue(), ((Long) spwn.get("z")).doubleValue(), ((Double) spwn.get("yaw")).floatValue(), ((Double) spwn.get("pitch")).floatValue());
                 Arenas.registerLobby(new Lobby((String) array.get("for"), pt1, pt2, spawn));
             }
         } catch (FileNotFoundException e) {
@@ -311,6 +313,18 @@ public class ArenaUtils {
         for (Lobby l : lobby) {
             Location pt1 = l.getPt1();
             Location pt2 = l.getPt2();
+            if (vector.isInAABB(Vector.getMinimum(pt1.toVector(), pt2.toVector()), Vector.getMaximum(pt1.toVector(), pt2.toVector())))
+                return true;
+        }
+        return false;
+    }
+
+    public static boolean isProtectedArena(Location loc){
+        Vector vector = loc.toVector();
+        ArrayList<Arena> arenas = Arenas.arenas;
+        for(Arena a : arenas){
+            Location pt1 = a.getPt1();
+            Location pt2 = a.getPt2();
             if (vector.isInAABB(Vector.getMinimum(pt1.toVector(), pt2.toVector()), Vector.getMaximum(pt1.toVector(), pt2.toVector())))
                 return true;
         }
