@@ -54,7 +54,7 @@ public class MessageHelper {
     }
 
     public static String getMessageFormattedWithoutPrefix(String path, Object... args) {
-        return replaceArgs(getMessage(path), args);
+        return replaceArgs(getMessageWithoutPrefix(path), args);
     }
 
 
