@@ -1,10 +1,11 @@
 package me.mrkirby153.plugins.ThePlague;
 
 import me.mrkirby153.plugins.ThePlague.arena.ArenaUtils;
-import me.mrkirby153.plugins.ThePlague.command.commands.ArenaCommands;
 import me.mrkirby153.plugins.ThePlague.command.Commands;
-import me.mrkirby153.plugins.ThePlague.command.commands.GeneralCommands;
 import me.mrkirby153.plugins.ThePlague.command.ThePlagueExecutor;
+import me.mrkirby153.plugins.ThePlague.command.commands.ArenaCommands;
+import me.mrkirby153.plugins.ThePlague.command.commands.GameCommands;
+import me.mrkirby153.plugins.ThePlague.command.commands.GeneralCommands;
 import me.mrkirby153.plugins.ThePlague.listeners.ArenaListener;
 import me.mrkirby153.plugins.ThePlague.listeners.CreationListener;
 import me.mrkirby153.plugins.ThePlague.signs.SignUpdater;
@@ -15,11 +16,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.Level;
 
 public class ThePlague extends JavaPlugin {
-    public static ThePlague instance;
+    private static ThePlague instance;
 
     private FileConfiguration messages = null;
     private File messageFile = null;
@@ -35,6 +35,8 @@ public class ThePlague extends JavaPlugin {
 
         Commands.registerNewHandler(GeneralCommands.class);
         Commands.registerNewHandler(ArenaCommands.class);
+        Commands.registerNewHandler(GameCommands.class);
+
         getServer().getPluginManager().registerEvents(new ArenaListener(), this);
         getServer().getPluginManager().registerEvents(new CreationListener(), this);
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new SignUpdater(), 10L, 10L);
@@ -56,7 +58,7 @@ public class ThePlague extends JavaPlugin {
         }
         messages = YamlConfiguration.loadConfiguration(messageFile);
 
-        InputStream defMessageStream = this.getResource("messages.yml");
+//        InputStream defMessageStream = this.getResource("messages.yml");
         if(messageFile != null) {
             YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(messageFile);
             messages.setDefaults(defConfig);
