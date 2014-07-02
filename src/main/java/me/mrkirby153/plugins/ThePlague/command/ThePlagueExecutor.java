@@ -89,8 +89,9 @@ public class ThePlagueExecutor implements CommandExecutor {
                 }
             }
         } catch (Exception e) {
+            MessageHelper.sendMessage(sender, "command.errorOccured");
             e.printStackTrace();
-            MessageHelper.sendMessage(sender, "command.errorOccured", e.getMessage());
+            return true;
         }
         MessageHelper.sendMessage(sender, "command.unknownCommand", commandName);
         return true;
