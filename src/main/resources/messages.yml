@@ -12,4 +12,49 @@ command:
     notConsole: '&4This command can only be executed from the console!'
     noPermission: '&4You do not have permission to preform this command!'
     unknownCommand: '&4The command %1 was not recognized as a valid command!'
-    errorOccured: '&4An internal error occured when preforming this command! (%1)'
+    errorOccured: '&4An internal error occured when preforming this command!'
+    invalidArgs: '&4You have provided one or more invalid arguments!'
+    help:
+        select: 'Select an arena with /theplague select <ARENA NAME>'
+        create:
+            arena: 'Create an arena with /theplague create <ARENA NAME>'
+        resave: 'Write all the blocks of the given arena to its file via /theplague resave <ARENA NAME>'
+        restore: 'Load all the blocks from disk via /theplague restore <ARENA NAME>'
+    msg-update:
+        msgFileReset: '&4Reset message file'
+        help: '&4Usage: /theplague msg-reset (safe)'
+    msg-update-safe:
+        err: '&4There was a problem resetting the message file!'
+        success: '&2Updated your message file'
+game:
+    arenaListHeader: '===== Arenas ====='
+    arenaListFooter: '=================='
+    invalidArena: '&4That arena does not exist!'
+    arenaListEntry: '%1 in state %2'
+    notInArena: '&4You are not in an arena!'
+    states: '&1Valid states an arena can be in are: &7%1'
+    missingName: '&4Please specify an arena name'
+    invalidState: '&4That state does not exist!'
+    newState: 'Arena %1 is now in state %2'
+    stateSwitchSuccess: '&2Arena state updated!'
+arena:
+    create:
+        deactivate: '&6Deactivated creation mode'
+        activate: '&6Activated creation mode'
+        notCreating: '&4You must be in creation mode to do that! Type &6/theplague create &4 to enter creation mode'
+        invalidArena: '&4That arena does not exist!'
+        invalidSelectedArena: '&4You either do not have an arena selected or the arena you have selected has been deleted. Select another with &6/theplague select <ARENA NAME>'
+        selectSuccess: '&2Selected arena &6%1&4!'
+        invalidSelection: '&4You need to select two points with your creation stick!'
+        lobbySuccess: '&2Created lobby!'
+        lobbyErr: '&4The specified arena does not exist!'
+        noLobby: '&4There is no lobby for this arena!'
+        lobbySpawnSuccess: '&2Set the lobby spawn for the current selected arena to your current location!'
+        alreadyExists: '&4The specified arena already exists!'
+        invalidWorlds: '&4Points one and two MUST be in the same world'
+    save:
+        invalidArena: '&4The specified arena does not exist!'
+        success: '&2Re-wrote all the blocks in arena %1 to disk!'
+    restore:
+        invalidArena: '&4The specified arena does not exist!'
+        success: '&2Loaded blocks from disk!'
