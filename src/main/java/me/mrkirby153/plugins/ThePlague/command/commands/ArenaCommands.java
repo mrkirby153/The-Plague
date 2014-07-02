@@ -32,7 +32,7 @@ public class ArenaCommands {
     @Command(name = "select", permission = "theplague.admin.select", description = "Sets your currently active arena (the one you make changes to)")
     public void select(CommandSender sender, String[] args) {
         if (args.length < 1) {
-            MessageHelper.sendMessage(sender, "commands.select.help");
+            MessageHelper.sendMessage(sender, "commands.help.select");
             return;
         }
         Player p = (Player) sender;
@@ -158,7 +158,7 @@ public class ArenaCommands {
 
     }
 
-    @Command(name = "resave", aliases = {"save"}, permission = "theplague.admin.resave", description = "Re-saves the given arena to a file")
+    @Command(name = "resave", aliases = {"save"}, permission = "theplague.admin.resave", description = "Re-saves the given arena to a file", executeLevel = 2)
     public void resave(CommandSender sender, String[] args) {
         if (args.length < 1) {
             MessageHelper.sendMessage(sender, "commands.help.resave");
@@ -170,10 +170,10 @@ public class ArenaCommands {
             return;
         }
         ArenaUtils.saveBlocksToFile(a);
-        MessageHelper.sendMessage(sender, "arena.save.success");
+        MessageHelper.sendMessage(sender, "arena.save.success", a.getName());
     }
 
-    @Command(name = "restore", aliases = {"r", "load"}, permission = "theplague.admin.restore", description = "Loads the arena from a file")
+    @Command(name = "restore", aliases = {"r", "load"}, permission = "theplague.admin.restore", description = "Loads the arena from a file", executeLevel = 2)
     public void load(CommandSender sender, String[] args) {
         if (args.length < 1) {
             MessageHelper.sendMessage(sender, "commands.help.restore");
