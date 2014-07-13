@@ -1,7 +1,6 @@
 package me.mrkirby153.plugins.ThePlague.command.commands;
 
 import me.mrkirby153.plugins.ThePlague.arena.Arena;
-import me.mrkirby153.plugins.ThePlague.arena.ArenaNotFoundException;
 import me.mrkirby153.plugins.ThePlague.arena.ArenaUtils;
 import me.mrkirby153.plugins.ThePlague.arena.Arenas;
 import me.mrkirby153.plugins.ThePlague.arena.lobby.Lobby;
@@ -85,14 +84,11 @@ public class ArenaCommands {
             MessageHelper.sendMessage(sender, "arena.create.invalidSelection");
             return;
         }
-        try {
-            Lobby lobby = new Lobby(selectedArena.getName(), pt1, pt2);
-            Arenas.registerLobby(lobby);
-            lobby.saveToFile();
-            MessageHelper.sendMessage(sender, "arena.create.lobbySuccess");
-        } catch (ArenaNotFoundException ex) {
-            MessageHelper.sendMessage(sender, "arena.create.lobbyErr", ex.getMessage());
-        }
+        Lobby lobby = new Lobby(selectedArena.getName(), pt1, pt2);
+        Arenas.registerLobby(lobby);
+        lobby.saveToFile();
+        MessageHelper.sendMessage(sender, "arena.create.lobbySuccess");
+
     }
 
     @SubCommand(superCommand = "create", commandName = "spawn-lobby", description = "Sets the lobby spawn for the selected arena to your location", subPermission = "theplague.admin.create.lobbySpawn")

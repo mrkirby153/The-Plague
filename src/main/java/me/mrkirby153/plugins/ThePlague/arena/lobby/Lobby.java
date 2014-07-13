@@ -2,7 +2,6 @@ package me.mrkirby153.plugins.ThePlague.arena.lobby;
 
 import me.mrkirby153.plugins.ThePlague.ThePlague;
 import me.mrkirby153.plugins.ThePlague.arena.Arena;
-import me.mrkirby153.plugins.ThePlague.arena.ArenaNotFoundException;
 import me.mrkirby153.plugins.ThePlague.arena.ArenaUtils;
 import me.mrkirby153.plugins.ThePlague.arena.Arenas;
 import org.bukkit.Location;
@@ -24,18 +23,16 @@ public class Lobby {
     private Location spawn;
     private ArrayList<Player> currentPlayers = new ArrayList<Player>();
 
-    public Lobby(String forArena, Location pt1, Location pt2, Location spawn) throws ArenaNotFoundException {
+    public Lobby(String forArena, Location pt1, Location pt2, Location spawn) {
         if(Arenas.findByName(forArena) == null)
-            throw new ArenaNotFoundException(String.format("The arena '%s' does not exist!", forArena));
+            return;
         this.forArena = Arenas.findByName(forArena);
         this.pt1 = pt1;
         this.pt2 = pt2;
         this.spawn = spawn;
     }
 
-    public Lobby(String forArena, Location pt1, Location pt2) throws ArenaNotFoundException {
-        if(Arenas.findByName(forArena) == null)
-            throw new ArenaNotFoundException(String.format("The arena '%s' does not exist!", forArena));
+    public Lobby(String forArena, Location pt1, Location pt2) {
         this.forArena = Arenas.findByName(forArena);
         this.pt1 = pt1;
         this.pt2 = pt2;

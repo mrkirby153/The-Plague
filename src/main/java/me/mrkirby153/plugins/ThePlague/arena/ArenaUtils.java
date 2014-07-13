@@ -244,8 +244,6 @@ public class ArenaUtils {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        } catch (ArenaNotFoundException e) {
-            e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -319,10 +317,10 @@ public class ArenaUtils {
         return false;
     }
 
-    public static boolean isProtectedArena(Location loc){
+    public static boolean isProtectedArena(Location loc) {
         Vector vector = loc.toVector();
         ArrayList<Arena> arenas = Arenas.arenas;
-        for(Arena a : arenas){
+        for (Arena a : arenas) {
             Location pt1 = a.getPt1();
             Location pt2 = a.getPt2();
             if (vector.isInAABB(Vector.getMinimum(pt1.toVector(), pt2.toVector()), Vector.getMaximum(pt1.toVector(), pt2.toVector())))

@@ -132,6 +132,7 @@ public class Arena extends BukkitRunnable {
         return l2;
     }
 
+    @SuppressWarnings("deprecation")
     public void join(Player p) {
         //TODO: Save inventory
         if (Arenas.findLobbyForArena(this) != null) {
@@ -140,10 +141,12 @@ public class Arena extends BukkitRunnable {
                 this.playersInGame.add(p.getName());
             InventoryHelper.save(p);
             for (String players : this.playersInGame) {
+                // TODO: Move to messaging system
                 ChatHelper.sendToPlayer(Bukkit.getPlayerExact(players), ChatColor.GOLD + players + " has joined!");
                 Bukkit.getPlayerExact(players).playSound(Bukkit.getPlayerExact(players).getLocation(), Sound.NOTE_PLING, 1F, 0.12F);
             }
         } else {
+            // TODO: Move to messaging system
             ChatHelper.sendToPlayer(p, ChatColor.RED + "That arena is missing a lobby");
         }
     }
@@ -218,6 +221,7 @@ public class Arena extends BukkitRunnable {
 
     }
 
+    @SuppressWarnings("depercation")
     private void lobbyScoreboard() {
         Scoreboard board = manager.getNewScoreboard();
         Objective o = board.registerNewObjective("game_score", "dummy");
@@ -246,8 +250,10 @@ public class Arena extends BukkitRunnable {
         return this.playersInGame;
     }
 
+    @SuppressWarnings("deprecation")
     public void leave(Player p) {
         for (String players : this.playersInGame) {
+            // TODO: Move to new messaging system.
             ChatHelper.sendToPlayer(Bukkit.getPlayerExact(players), ChatColor.GOLD + players + " has left!");
             Bukkit.getPlayerExact(players).playSound(Bukkit.getPlayerExact(players).getLocation(), Sound.NOTE_BASS, 100F, 0.2F);
         }
