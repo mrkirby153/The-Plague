@@ -42,9 +42,9 @@ public class ThePlague extends JavaPlugin {
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new SignUpdater(), 10L, 10L);
 
         ArenaUtils.loadAllArenas();
-        ArenaUtils.loadAllLobbies();
         Signs.loadSignsFromFile();
         saveDefaultMessageFile();
+        ArenaUtils.getAllArenas();
     }
 
     @Override
