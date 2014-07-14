@@ -58,3 +58,5 @@ arena:
     restore:
         invalidArena: '&4The specified arena does not exist!'
         success: '&2Loaded blocks from disk!'
+    savingArena: 'Saving %1 to file'
+    saveComplete: 'Saved %1 blocks in %2 seconds!'
