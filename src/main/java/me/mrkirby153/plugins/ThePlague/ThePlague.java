@@ -58,7 +58,6 @@ public class ThePlague extends JavaPlugin {
         }
         messages = YamlConfiguration.loadConfiguration(messageFile);
 
-//        InputStream defMessageStream = this.getResource("messages.yml");
         if(messageFile != null) {
             YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(messageFile);
             messages.setDefaults(defConfig);
