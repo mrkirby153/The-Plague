@@ -58,6 +58,8 @@ public class ArenaCreator implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         if (!event.getPlayer().isSneaking()) {
+            if(event.getItem() == null)
+                return;
             if(!event.getItem().equals(Arenas.creationStick()))
                 return;
             if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
