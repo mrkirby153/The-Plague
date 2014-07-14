@@ -74,4 +74,13 @@ public class GeneralCommands {
         }
         return true;
     }
+
+    @Command(name="msg-test", description = "Displays the message in the given path", executeLevel = 2, permission = "theplague.admin.msg-test")
+    public void msgTest(CommandSender sender, String[] args){
+        if(args.length == 0){
+            MessageHelper.sendMessage(sender, "commands.msg-test.invalidArgs");
+            return;
+        }
+        MessageHelper.sendMessage(sender, args[0]);
+    }
 }
