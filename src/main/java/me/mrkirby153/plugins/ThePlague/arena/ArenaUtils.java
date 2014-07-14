@@ -10,7 +10,6 @@ import org.bukkit.util.Vector;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public class ArenaUtils {
     private static JSONParser parser = new JSONParser();
 
     @SuppressWarnings("deprecation")
-    public static void saveBlocksToFile(Arena arena) {
+    public static boolean saveBlocksToFile(Arena arena) {
         // Loop through every block and save it to a file
         Location l1 = arena.getPt1();
         Location l2 = arena.getPt2();
@@ -39,7 +38,7 @@ public class ArenaUtils {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             MessageHelper.sendMessage("arena.saveError", arenaBlocksFile.getAbsolutePath(), e.getMessage());
-            return;
+            return false;
         }
         float startTime = System.currentTimeMillis();
         int count = 0;
@@ -58,11 +57,13 @@ public class ArenaUtils {
             writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
 
         long endTime = System.currentTimeMillis();
         float totalTime = (endTime - startTime) / 1000;
         MessageHelper.sendAdminMessage("arena.saveComplete", count, totalTime);
+        return true;
     }
 
     @SuppressWarnings("deprecation")
@@ -195,14 +196,20 @@ public class ArenaUtils {
 
     public static ArrayList<String> getAllArenas() {
         File dataFolder = new File(ThePlague.instance().getDataFolder(), "data");
-        if(dataFolder == null)
+        if (dataFolder == null) {
+            System.out.println("File " + dataFolder.getAbsolutePath() + " is null");
             return new ArrayList<String>();
-        if(dataFolder.listFiles() == null)
+        }
+        if (dataFolder.listFiles() == null) {
+            System.out.println("File " + dataFolder.getAbsolutePath() + " is empty");
             return new ArrayList<String>();
+        }
         List<File> allFiles = Arrays.asList(dataFolder.listFiles());
         ArrayList<String> folders = new ArrayList<String>();
         for (File f : allFiles) {
+            System.out.println("Processing file " + f.getAbsolutePath());
             if (f.isDirectory()) {
+                System.out.println("Arena found! " + f.getAbsolutePath());
                 folders.add(f.getName());
             }
         }
@@ -211,13 +218,16 @@ public class ArenaUtils {
 
     public static void loadAllArenas() {
         ArrayList<String> arenaNames = getAllArenas();
+        ThePlague.instance().getLogger().info("Begin loading of arenas...");
         for (String s : arenaNames) {
+            ThePlague.instance().getLogger().info("Loading arena " + s);
             File arenaFolder = new File(ThePlague.instance().getDataFolder(), "data" + File.separator + s);
             File dataFile = new File(arenaFolder, "data.json");
             JSONObject jsonFile;
             try {
                 jsonFile = (JSONObject) parser.parse(new FileReader(dataFile));
             } catch (Exception e) {
+                e.printStackTrace();
                 continue;
             }
             JSONObject arena = (JSONObject) jsonFile.get("arena");
@@ -243,12 +253,18 @@ public class ArenaUtils {
                 l = new Lobby(s, lobbyPt1, lobbyPt2);
             Arenas.registerLobby(l);
             //TODO: Add flag support
+            System.out.println("Loaded arena " + s + "!");
         }
+        ThePlague.instance().getLogger().info("End loading of arenas");
     }
 
     @SuppressWarnings("unchecked")
-    public static void saveArena(String name) {
+    public static boolean saveArena(String name) {
         Arena a = Arenas.findByName(name);
+        if (a == null) {
+            MessageHelper.sendAdminMessage("theplague.create.noArenaFound", name);
+            return false;
+        }
         File arenaDirectory = new File(ThePlague.instance().getDataFolder(), "data" + File.separator + name);
         if (!arenaDirectory.exists()) {
             arenaDirectory.mkdirs();
@@ -262,26 +278,30 @@ public class ArenaUtils {
             }
         JSONObject jsonFile = null;
         try {
-            jsonFile = (JSONObject) parser.parse(new FileReader(dataFile));
+            BufferedReader br = new BufferedReader(new FileReader(dataFile));
+            if (br.readLine() != null)
+                jsonFile = (JSONObject) parser.parse(new FileReader(dataFile));
+            else
+                jsonFile = new JSONObject();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (jsonFile == null)
-            return;
         Lobby l = Arenas.findLobbyForArena(a);
         jsonFile.put("name", name);
-        jsonFile.put("currentStatus", a.getState());
+        jsonFile.put("currentStatus", a.getState().toString());
         JSONObject arena = new JSONObject();
         JSONObject lobby = new JSONObject();
         arena.put("pt1", locationToString(a.getPt1()));
         arena.put("pt2", locationToString(a.getPt2()));
-
-        lobby.put("pt1", locationToString(l.getPt1()));
-        lobby.put("pt2", locationToString(l.getPt2()));
+        if (l != null) {
+            lobby.put("pt1", locationToString(l.getPt1()));
+            lobby.put("pt2", locationToString(l.getPt2()));
+        }
+        jsonFile.put("arena", arena);
+        jsonFile.put("lobby", lobby);
 
         //TODO: Add flag support
         jsonFile.put("flags", new JSONArray());
-
         try {
             FileWriter fr = new FileWriter(dataFile);
             fr.write(formatJson(jsonFile.toJSONString()));
@@ -289,11 +309,13 @@ public class ArenaUtils {
             fr.close();
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     private static Location stringToLocaiton(String location) {
-        String[] parts = location.split(",");
+        String[] parts = location.split(":");
         if (parts.length < 4) {
             return null;
         }
@@ -304,6 +326,6 @@ public class ArenaUtils {
     }
 
     private static String locationToString(Location location) {
-        return String.format("%s,%s,%s,%s", location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
+        return String.format("%s:%s:%s:%s", location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }
 }
