@@ -135,8 +135,6 @@ public class ArenaCommands {
         Location pt1 = creator.getPt1();
         Location pt2 = creator.getPt2();
         if (pt1 == null || pt2 == null) {
-            System.out.println(pt1);
-            System.out.println(pt2);
             MessageHelper.sendMessage(sender, "arena.create.invalidSelection");
             return;
         }
@@ -145,8 +143,15 @@ public class ArenaCommands {
             return;
         }
         Arena arena = new Arena(arenaName, pt1, pt2, pt1.getWorld());
-        ArenaUtils.saveBlocksToFile(arena);
-        ArenaUtils.addArena(arena);
+        Arenas.registerArena(arena);
+        if (!ArenaUtils.saveBlocksToFile(arena)) {
+            MessageHelper.sendMessage(sender, "arena.create.err.saveBlocks");
+            return;
+        }
+        if (!ArenaUtils.saveArena(arena.getName())) {
+            MessageHelper.sendMessage(sender, "arena.create.err.saveArena");
+            return;
+        }
         creator.setSelectedArena(arena);
         creator.setPt1(null);
         creator.setPt2(null);
