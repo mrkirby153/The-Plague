@@ -14,7 +14,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.HashMap;
 
 public class Arena extends BukkitRunnable {
     private String name;
@@ -23,13 +23,13 @@ public class Arena extends BukkitRunnable {
     private World world;
     private ArrayList<String> playersInGame = new ArrayList<String>();
     private ArrayList<String> infectedPlayers = new ArrayList<String>();
+    private HashMap<Flag, String> flags = new HashMap<Flag, String>();
 
     private ArrayList<Location> uninfedtedSpawnLocations = new ArrayList<Location>();
     private Location infectedSpawn;
     private ArenaState state = ArenaState.DISABLED;
     private int secondsLeft = 0;
     private String winner = "Nobody";
-    private int maxPlayers = 10;
 
     private boolean active = false;
     private ScoreboardManager manager = Bukkit.getScoreboardManager();
@@ -48,14 +48,6 @@ public class Arena extends BukkitRunnable {
         this.world = Bukkit.getWorld(world);
     }
 
-    public void saveArenaToFile() {
-        ArenaUtils.saveBlocksToFile(this);
-    }
-
-    public void loadArenaFromFile() {
-        File arenaDataFolder = new File(ThePlague.instance().getDataFolder().getAbsolutePath() + File.separator + "data" + File.separator + name);
-
-    }
 
     // Save respawn data
     public void saveRespawnData() {
@@ -81,24 +73,6 @@ public class Arena extends BukkitRunnable {
     public void addUninfectedSpawn(Location location) {
         uninfedtedSpawnLocations.add(location);
         saveRespawnData();
-    }
-
-    public void setMaxPlayers(int players){
-        this.maxPlayers = players;
-        ArenaUtils.saveArena(this.getName());
-    }
-
-    public int getMaxPlayers(){
-        return this.maxPlayers;
-    }
-
-    public Location removeUninfectedSpawn(int id) {
-        return uninfedtedSpawnLocations.remove(id);
-    }
-
-    public Location randomUninfectedSpawn() {
-        Random r = new Random();
-        return uninfedtedSpawnLocations.get(r.nextInt(uninfedtedSpawnLocations.size()));
     }
 
     public void loadRespawnLocations() {
@@ -134,7 +108,6 @@ public class Arena extends BukkitRunnable {
 
     @SuppressWarnings("deprecation")
     public void join(Player p) {
-        //TODO: Save inventory
         if (Arenas.findLobbyForArena(this) != null) {
             p.teleport(Arenas.findLobbyForArena(this).getSpawn());
             if (!this.playersInGame.contains(p.getName()))
@@ -161,7 +134,7 @@ public class Arena extends BukkitRunnable {
 
 
     public String getWinner() {
-        return "Nobody";
+        return winner;
     }
 
     public void start() {
@@ -259,5 +232,19 @@ public class Arena extends BukkitRunnable {
         }
         this.playersInGame.remove(p.getName());
         p.setScoreboard(manager.getNewScoreboard());
+    }
+
+    public void setFlag(Flag flagName, String value){
+        String currentValue = flags.get(flagName);
+        if(currentValue == null || currentValue.isEmpty()){
+            flags.put(flagName, value);
+            return;
+        }
+        flags.remove(flagName);
+        flags.put(flagName, value);
+    }
+
+    public String getFlagValue(Flag flag){
+        return flags.get(flag);
     }
 }
