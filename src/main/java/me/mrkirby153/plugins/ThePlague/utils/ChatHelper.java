@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.util.logging.Level;
 
+@Deprecated
 public class ChatHelper {
 
     private static ThePlague plugin = ThePlague.instance();

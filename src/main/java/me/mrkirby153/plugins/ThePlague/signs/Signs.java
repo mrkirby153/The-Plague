@@ -11,18 +11,32 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Signs {
+    /** A list of all the signs */
     private static ArrayList<ArenaSign> arenaSigns = new ArrayList<ArenaSign>();
 
+    /**
+     * Adds a sign
+     * @param arenaSign The Arena Sign
+     */
     public static void addSign(ArenaSign arenaSign) {
         arenaSigns.add(arenaSign);
         saveSignsToFile();
     }
 
+    /**
+     * Removes a sign
+     * @param sign The arena sign to remove
+     */
     public static void removeSign(ArenaSign sign) {
         arenaSigns.remove(sign);
         saveSignsToFile();
     }
 
+    /**
+     * Gets the sign at the given location
+     * @param location The location
+     * @return The sign at the location given
+     */
     public static ArenaSign findSignFromLocation(Location location) {
         for (ArenaSign as : arenaSigns) {
             if (as.getLocation().equals(location))
@@ -31,17 +45,27 @@ public class Signs {
         return null;
     }
 
+    /**
+     * Updates all the signs
+     */
     public static void updateAllSigns() {
         updateArenaSigns();
     }
 
+    /**
+     * Updates all the signs
+     */
     private static void updateArenaSigns() {
         for (ArenaSign as : arenaSigns) {
             as.update();
         }
     }
 
+    /**
+     * Writes the sign list to the file
+     */
     public static void saveSignsToFile() {
+        //TODO: Move to new filesystem
         try {
             File file = new File(ThePlague.instance().getDataFolder().getAbsolutePath() + File.separator + "data" + File.separator + "signs.arena-signs");
             if (!file.exists()) {
@@ -60,7 +84,11 @@ public class Signs {
         }
     }
 
+    /**
+     * Loads the sign list form a file
+     */
     public static void loadSignsFromFile() {
+        //TODO: Move to new filesystem
         try {
             File file = new File(ThePlague.instance().getDataFolder().getAbsolutePath() + File.separator + "data" + File.separator + "signs.arena-signs");
             if (!file.exists())

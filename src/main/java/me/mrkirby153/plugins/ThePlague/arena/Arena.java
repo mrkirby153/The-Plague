@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Arena extends BukkitRunnable {
+    /* Fields related to the storing of arena data*/
     private String name;
     private Location l1;
     private Location l2;
@@ -25,6 +26,7 @@ public class Arena extends BukkitRunnable {
     private ArrayList<String> infectedPlayers = new ArrayList<String>();
     private HashMap<Flag, String> flags = new HashMap<Flag, String>();
 
+    /* Fields related to the temporary storage of data related to the arena */
     private ArrayList<Location> uninfedtedSpawnLocations = new ArrayList<Location>();
     private Location infectedSpawn;
     private ArenaState state = ArenaState.DISABLED;
@@ -34,6 +36,14 @@ public class Arena extends BukkitRunnable {
     private boolean active = false;
     private ScoreboardManager manager = Bukkit.getScoreboardManager();
 
+    /**
+     * Creates a new arena
+     *
+     * @param name  The arena name
+     * @param pt1   The first point of the arena
+     * @param pt2   The second point of the arena
+     * @param world The world that the arena is in
+     */
     public Arena(String name, Location pt1, Location pt2, World world) {
         this.name = name;
         this.l1 = pt1;
@@ -41,6 +51,14 @@ public class Arena extends BukkitRunnable {
         this.world = world;
     }
 
+    /**
+     * Creates a new arena
+     *
+     * @param name  The arena name
+     * @param pt1   The first point of the arena
+     * @param pt2   The second point of the arena
+     * @param world The world name that the arena is in
+     */
     public Arena(String name, Location pt1, Location pt2, String world) {
         this.name = name;
         this.l1 = pt1;
@@ -48,9 +66,12 @@ public class Arena extends BukkitRunnable {
         this.world = Bukkit.getWorld(world);
     }
 
-
-    // Save respawn data
+    /**
+     * Saves respawn data to a file.
+     */
+    @Deprecated
     public void saveRespawnData() {
+        //TODO: Rewrite respawn data to correspond with new filesystem
         JSONObject spawns = new JSONObject();
         JSONArray uninfected = new JSONArray();
         for (Location l : uninfedtedSpawnLocations) {
@@ -69,13 +90,22 @@ public class Arena extends BukkitRunnable {
         }
     }
 
-
+    /**
+     * Adds a location where the unifected/survivors spawn
+     *
+     * @param location The location where the player can spawn at
+     */
     public void addUninfectedSpawn(Location location) {
         uninfedtedSpawnLocations.add(location);
         saveRespawnData();
     }
 
+    /**
+     * Loads the respawn data from the disk.
+     */
+    @Deprecated
     public void loadRespawnLocations() {
+        //TODO: Rewrite respawn data to correspond with new filesystem
         try {
             File spawns = new File(ThePlague.instance().getDataFolder().getAbsolutePath() + File.separator + "data" + File.separator + this.name + File.separator + name + ".spawns");
             if (!spawns.exists())
@@ -94,18 +124,38 @@ public class Arena extends BukkitRunnable {
         }
     }
 
+    /**
+     * Gets the arena name
+     *
+     * @return The arena's name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets the first point of the arena
+     *
+     * @return The first point of the arena
+     */
     public Location getPt1() {
         return l1;
     }
 
+    /**
+     * Gets the second point of the arena
+     *
+     * @return The second point of the arena
+     */
     public Location getPt2() {
         return l2;
     }
 
+    /**
+     * Joins a player into the arena and teleports the to the lobby
+     *
+     * @param p The player to be joined
+     */
     @SuppressWarnings("deprecation")
     public void join(Player p) {
         if (Arenas.findLobbyForArena(this) != null) {
@@ -124,25 +174,45 @@ public class Arena extends BukkitRunnable {
         }
     }
 
+    /**
+     * Gets the arena's current state
+     *
+     * @return The state the arena is in
+     */
     public ArenaState getState() {
         return state;
     }
 
+    /**
+     * Sets the arena's state
+     *
+     * @param state The state that the arena will be in
+     */
     public void setState(ArenaState state) {
         this.state = state;
     }
 
-
+    /**
+     * Gets the winner
+     *
+     * @return The winner
+     */
     public String getWinner() {
         return winner;
     }
 
+    /**
+     * Starts the countdown to start the game
+     */
     public void start() {
         this.secondsLeft = 20;
         setState(ArenaState.RUNNING);
         active = true;
     }
 
+    /**
+     * Handle all the runtime properties of the arena.
+     */
     public void run() {
         switch (this.state) {
             case WAITING:
@@ -189,11 +259,17 @@ public class Arena extends BukkitRunnable {
         secondsLeft--;
     }
 
+    /**
+     * Updates the scoreboard for the players ingame
+     */
     @SuppressWarnings("deprecation")
     private void gameScoreboard() {
-
+        //TODO: Add game scoreboard
     }
 
+    /**
+     * Updates the scoreboard for the players in the lobby
+     */
     @SuppressWarnings("depercation")
     private void lobbyScoreboard() {
         Scoreboard board = manager.getNewScoreboard();
@@ -215,14 +291,29 @@ public class Arena extends BukkitRunnable {
         }
     }
 
+    /**
+     * Gets the total amount of players in the game
+     *
+     * @return The amount of players in game
+     */
     public int playerCount() {
         return this.playersInGame.size();
     }
 
+    /**
+     * Gets the players in the game
+     *
+     * @return An arrray list of the playernames ingame.
+     */
     public ArrayList<String> getPlayers() {
         return this.playersInGame;
     }
 
+    /**
+     * Returns the player to his pervious location
+     *
+     * @param p The player leaving
+     */
     @SuppressWarnings("deprecation")
     public void leave(Player p) {
         for (String players : this.playersInGame) {
@@ -232,11 +323,18 @@ public class Arena extends BukkitRunnable {
         }
         this.playersInGame.remove(p.getName());
         p.setScoreboard(manager.getNewScoreboard());
+        //TODO: Teleport the player back to his previous location
     }
 
-    public void setFlag(Flag flagName, String value){
+    /**
+     * Sets a flag for the arena.
+     *
+     * @param flagName The flag to be set
+     * @param value    The flag's value
+     */
+    public void setFlag(Flag flagName, String value) {
         String currentValue = flags.get(flagName);
-        if(currentValue == null || currentValue.isEmpty()){
+        if (currentValue == null || currentValue.isEmpty()) {
             flags.put(flagName, value);
             return;
         }
@@ -244,7 +342,13 @@ public class Arena extends BukkitRunnable {
         flags.put(flagName, value);
     }
 
-    public String getFlagValue(Flag flag){
+    /**
+     * Gets a flag's value
+     *
+     * @param flag The flag name
+     * @return The flag's value
+     */
+    public String getFlagValue(Flag flag) {
         return flags.get(flag);
     }
 }

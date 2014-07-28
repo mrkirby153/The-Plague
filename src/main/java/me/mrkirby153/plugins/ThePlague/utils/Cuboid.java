@@ -7,30 +7,59 @@ import java.util.ArrayList;
 
 public class Cuboid {
 
+    /** The first point of the cuboid */
     private Location pt1;
+    /** The second point of the cuboid */
     private Location pt2;
 
+    /**
+     * Creates a new cuboid
+     * @param pt1 The first point of the cuboid
+     * @param pt2 The second point of the cuboid
+     */
     public Cuboid(Location pt1, Location pt2) {
         this.pt1 = pt1;
         this.pt2 = pt2;
     }
 
+    /**
+     * Checks if a location is in a cuboid
+     * @param location The location to check
+     * @return True if the location is in a cuboid
+     */
     public boolean isInCuboid(Location location) {
        return isInCuboid(location.toVector());
     }
 
+    /**
+     * Checks if a vector is in the cuboid
+     * @param vector The vector to check
+     * @return True if the vector is in a cuboid
+     */
     public boolean isInCuboid(Vector vector){
         return (vector.isInAABB(Vector.getMinimum(pt1.toVector(), pt2.toVector()), Vector.getMaximum(pt1.toVector(), pt2.toVector())));
     }
 
+    /**
+     * Gets the first point of the cuboid
+     * @return The first point of the cuboid
+     */
     public Location getPt1() {
         return this.pt1;
     }
 
+    /**
+     * Gets the second point of the cuboid
+     * @return The second point of the cuboid
+     */
     public Location getPt2() {
         return this.pt2;
     }
-    
+
+    /**
+     * Get a list of all the blocks in the cuboid
+     * @return A list of all the blocks in a cuboid
+     */
     public ArrayList<Location> getContainingLocation(){
         int minX, maxX, minY, maxY, minZ, maxZ;
         ArrayList<Location> locations = new ArrayList<Location>();

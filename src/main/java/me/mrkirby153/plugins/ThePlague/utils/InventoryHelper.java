@@ -15,6 +15,10 @@ public class InventoryHelper {
     private static HashMap<String, Float> playerXp = new HashMap<String, Float>();
     private static HashMap<String, Integer> playerXpLvl = new HashMap<String, Integer>();
 
+    /**
+     * Loads the player data from the hashmaps
+     * @param player The player object
+     */
     public static void load(Player player) {
         ItemStack[] inventory = playerItems.remove(player.getName());
         if (inventory != null)
@@ -48,6 +52,10 @@ public class InventoryHelper {
     }
 
 
+    /**
+     * Saves the player data
+     * @param player The player object to save
+     */
     public static void save(Player player) {
         ItemStack[] original = player.getInventory().getContents();
         ItemStack[] copy = new ItemStack[original.length];

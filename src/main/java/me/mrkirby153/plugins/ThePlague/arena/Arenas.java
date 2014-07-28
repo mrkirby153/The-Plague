@@ -15,13 +15,29 @@ import java.util.List;
 
 public class Arenas {
 
+    /**
+     * A list of all the creators
+     */
     public static ArrayList<ArenaCreator> creators = new ArrayList<ArenaCreator>();
+    /**
+     * A list of all the arenas
+     */
     public static ArrayList<Arena> arenas = new ArrayList<Arena>();
+    /**
+     * A list of all the lobbies
+     */
     public static ArrayList<Lobby> lobbies = new ArrayList<Lobby>();
 
-
+    /**
+     * The creation stick
+     */
     private static ItemStack creationStick;
 
+    /**
+     * Puts the player into creation mode
+     *
+     * @param player The player who is to be put into creation mode
+     */
     public static void activateCreator(Player player) {
         if (findCreatorByName(player.getName()) == null) {
             ArenaCreator ac = new ArenaCreator(player);
@@ -31,6 +47,11 @@ public class Arenas {
         }
     }
 
+    /**
+     * Removes the player from creation mode
+     *
+     * @param player The player who is to be removed from creation mode
+     */
     public static void deactivateCreator(Player player) {
         if (findCreatorByName(player.getName()) != null) {
             ArenaCreator ac = findCreatorByName(player.getName());
@@ -40,6 +61,12 @@ public class Arenas {
         }
     }
 
+    /**
+     * Gets the creator by its name
+     *
+     * @param name The creators name
+     * @return The creator
+     */
     public static ArenaCreator findCreatorByName(String name) {
         for (ArenaCreator ac : creators) {
             if (ac.getName().equalsIgnoreCase(name))
@@ -48,22 +75,47 @@ public class Arenas {
         return null;
     }
 
+    /**
+     * Adds an arena as a valid arena
+     *
+     * @param arena The arena
+     */
     public static void registerArena(Arena arena) {
         arenas.add(arena);
     }
 
+    /**
+     * Adds a lobby as a valid lobby
+     *
+     * @param lobby The lobby
+     */
     public static void registerLobby(Lobby lobby) {
         lobbies.add(lobby);
     }
 
+    /**
+     * Removes a lobby as a valid lobby
+     *
+     * @param lobby The lobby
+     */
     public static void unregisterLobby(Lobby lobby) {
         lobbies.remove(lobby);
     }
 
+    /**
+     * Removes an arena as a valid arena
+     *
+     * @param arena The arena
+     */
     public static void unregisterArena(Arena arena) {
         arenas.remove(arena);
     }
 
+    /**
+     * Finds an arena by its name
+     * @param name The arena name
+     * @return The arena
+     */
     public static Arena findByName(String name) {
         for (Arena a : arenas) {
             if (a.getName().equalsIgnoreCase(name))
@@ -72,6 +124,11 @@ public class Arenas {
         return null;
     }
 
+    /**
+     * Finds the lobby for the given arena
+     * @param arena The arena
+     * @return The given arena's lobby
+     */
     public static Lobby findLobbyForArena(Arena arena) {
         for (Lobby l : lobbies) {
             if (l.getForArena() == arena)
@@ -80,18 +137,29 @@ public class Arenas {
         return null;
     }
 
+    /**
+     * Gives the player the creation wand
+     * @param p The player
+     */
     public static void giveCreationStick(Player p) {
-        if(creationStick == null)
+        if (creationStick == null)
             constructCreateStick();
         p.getInventory().addItem(creationStick);
     }
 
-    public static void takeCreationStick(Player player){
-        if(creationStick == null)
+    /**
+     * Removes the creation wand from the player
+     * @param player The player
+     */
+    public static void takeCreationStick(Player player) {
+        if (creationStick == null)
             constructCreateStick();
         player.getInventory().remove(creationStick);
     }
 
+    /**
+     * Creates the creation stick
+     */
     private static void constructCreateStick() {
         creationStick = new ItemStack(Material.STICK);
         ItemMeta im = creationStick.getItemMeta();
@@ -104,15 +172,24 @@ public class Arenas {
         creationStick.setItemMeta(im);
     }
 
+    /**
+     * Gets the creation stick item
+     * @return The creation stick
+     */
     public static ItemStack creationStick() {
-        if(creationStick == null)
+        if (creationStick == null)
             constructCreateStick();
         return creationStick;
     }
 
+    /**
+     * Gets the arena the player is in
+     * @param p The player
+     * @return The arena the given player is in
+     */
     public static Arena getCurrentArena(Player p) {
-        for(Arena a : arenas){
-            if(a.getPlayers().contains(p.getName()))
+        for (Arena a : arenas) {
+            if (a.getPlayers().contains(p.getName()))
                 return a;
         }
         return null;

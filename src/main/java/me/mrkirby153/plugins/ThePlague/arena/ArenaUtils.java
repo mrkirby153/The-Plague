@@ -21,6 +21,11 @@ public class ArenaUtils {
 
     private static JSONParser parser = new JSONParser();
 
+    /**
+     * Saves the arena blocks to a file
+     * @param arena The arena to save blocks for
+     * @return True if the save was successful
+     */
     @SuppressWarnings("deprecation")
     public static boolean saveBlocksToFile(Arena arena) {
         // Loop through every block and save it to a file
@@ -66,6 +71,10 @@ public class ArenaUtils {
         return true;
     }
 
+    /**
+     * Loads the blocks from file
+     * @param arena The arena
+     */
     @SuppressWarnings("deprecation")
     public static void loadBlocksFromFile(final Arena arena) {
         File arenaBlocksFile = new File(dataPath + arena.getName() + File.separator + arena.getName() + ".arena-blocks");
@@ -117,6 +126,11 @@ public class ArenaUtils {
     }
 
 
+    /**
+     * Makes json data more human-readable
+     * @param json The json to format
+     * @return The formatted json
+     */
     public static String formatJson(String json) {
         StringBuilder sb = new StringBuilder();
         char newline = '\n';
@@ -149,10 +163,20 @@ public class ArenaUtils {
         return sb.toString();
     }
 
+    /**
+     * Checks if the provided location is protected
+     * @param location The location
+     * @return True if the location is protected
+     */
     public static boolean isProtected(Location location) {
         return isProtected(location.toVector());
     }
 
+    /**
+     * Checks if the provided vector is protected
+     * @param vector The vector
+     * @return True if the vector is protected
+     */
     public static boolean isProtected(Vector vector) {
         ArrayList<Arena> arenas = Arenas.arenas;
         ArrayList<Lobby> lobbies = Arenas.lobbies;
@@ -171,6 +195,11 @@ public class ArenaUtils {
         return false;
     }
 
+    /**
+     * Checks if the location is a lobby and is protected
+     * @param loc The location to check
+     * @return True if the location is in a lobby and protected
+     */
     public static boolean isProtectedLobby(Location loc) {
         Vector vector = loc.toVector();
         for (Lobby l : Arenas.lobbies) {
@@ -182,6 +211,11 @@ public class ArenaUtils {
         return false;
     }
 
+    /**
+     * Checks if the location is an arena and protected
+     * @param loc The location to check
+     * @return True if the location is in an arena and protected
+     */
     public static boolean isProtectedArena(Location loc) {
         Vector vector = loc.toVector();
         ArrayList<Arena> arenas = Arenas.arenas;
@@ -194,6 +228,10 @@ public class ArenaUtils {
         return false;
     }
 
+    /**
+     * Gets a list of all the arenas from file
+     * @return A list of all the arenas in a file.
+     */
     public static ArrayList<String> getAllArenas() {
         File dataFolder = new File(ThePlague.instance().getDataFolder(), "data");
         if (dataFolder == null) {
@@ -216,6 +254,9 @@ public class ArenaUtils {
         return folders;
     }
 
+    /**
+     * Loads all the arenas from file
+     */
     public static void loadAllArenas() {
         ArrayList<String> arenaNames = getAllArenas();
         ThePlague.instance().getLogger().info("Begin loading of arenas...");
@@ -258,6 +299,11 @@ public class ArenaUtils {
         ThePlague.instance().getLogger().info("End loading of arenas");
     }
 
+    /**
+     * Saves arena data to a file
+     * @param name The arena name
+     * @return true if the save was successful
+     */
     @SuppressWarnings("unchecked")
     public static boolean saveArena(String name) {
         Arena a = Arenas.findByName(name);
@@ -314,6 +360,11 @@ public class ArenaUtils {
         return true;
     }
 
+    /**
+     * Converts a string to a location
+     * @param location The string in the format world:x:y:z
+     * @return A location of the string provided
+     */
     private static Location stringToLocaiton(String location) {
         String[] parts = location.split(":");
         if (parts.length < 4) {
@@ -325,6 +376,11 @@ public class ArenaUtils {
         return new Location(w, Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3]));
     }
 
+    /**
+     * Converts a location to a string
+     * @param location The location to convert
+     * @return A string with the location
+     */
     private static String locationToString(Location location) {
         return String.format("%s:%s:%s:%s", location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }

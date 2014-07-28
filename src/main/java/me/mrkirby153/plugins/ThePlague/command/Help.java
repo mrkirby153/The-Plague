@@ -11,6 +11,11 @@ import java.util.ArrayList;
 public class Help {
     private static ArrayList<String> commands;
 
+    /**
+     * Shows the help page to the given sender
+     * @param sender The sender
+     * @param page The page number of the help
+     */
     public static void showHelp(CommandSender sender, int page) {
         if (sender instanceof Player)
             showHelpPlayer((Player) sender, page);
@@ -19,6 +24,9 @@ public class Help {
 
     }
 
+    /**
+     * Creates a list of all the commands
+     */
     public static void compileList() {
         ArrayList<Method> commandMethods = new ArrayList<Method>();
         ArrayList<Method> subCommandMethods = new ArrayList<Method>();
@@ -47,6 +55,11 @@ public class Help {
         }
     }
 
+    /**
+     * Shows the help to the player
+     * @param player The player to show the help to
+     * @param page The page number of the help
+     */
     public static void showHelpPlayer(Player player, int page) {
         // Compile a list of all commands/sub-commands
         if (commands == null)
@@ -68,6 +81,10 @@ public class Help {
 
     }
 
+    /**
+     * Shows the coonsole help
+     * @param sender The sender
+     */
     public static void showHelpConsole(CommandSender sender) {
         ArrayList<Method> commandMethods = new ArrayList<Method>();
         ArrayList<Method> subCommandMethods = new ArrayList<Method>();

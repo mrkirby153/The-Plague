@@ -16,10 +16,17 @@ public class ArenaSign {
         this.forArena = forArena;
     }
 
+    /**
+     * Gets the location for the sign
+     * @return The location
+     */
     public Location getLocation() {
         return this.location;
     }
 
+    /**
+     * Updates the sign
+     */
     public void update() {
         Block b = location.getBlock();
         if (!b.getType().toString().contains("SIGN")) {
@@ -77,6 +84,10 @@ public class ArenaSign {
         sign.update();
     }
 
+    /**
+     * Gets what arena the sign is for
+     * @return The arena
+     */
     public Arena getFor() {
         return forArena;
     }
