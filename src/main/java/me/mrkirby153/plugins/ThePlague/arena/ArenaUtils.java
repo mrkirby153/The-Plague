@@ -23,6 +23,7 @@ public class ArenaUtils {
 
     /**
      * Saves the arena blocks to a file
+     *
      * @param arena The arena to save blocks for
      * @return True if the save was successful
      */
@@ -73,6 +74,7 @@ public class ArenaUtils {
 
     /**
      * Loads the blocks from file
+     *
      * @param arena The arena
      */
     @SuppressWarnings("deprecation")
@@ -128,6 +130,7 @@ public class ArenaUtils {
 
     /**
      * Makes json data more human-readable
+     *
      * @param json The json to format
      * @return The formatted json
      */
@@ -165,6 +168,7 @@ public class ArenaUtils {
 
     /**
      * Checks if the provided location is protected
+     *
      * @param location The location
      * @return True if the location is protected
      */
@@ -174,6 +178,7 @@ public class ArenaUtils {
 
     /**
      * Checks if the provided vector is protected
+     *
      * @param vector The vector
      * @return True if the vector is protected
      */
@@ -197,12 +202,15 @@ public class ArenaUtils {
 
     /**
      * Checks if the location is a lobby and is protected
+     *
      * @param loc The location to check
      * @return True if the location is in a lobby and protected
      */
     public static boolean isProtectedLobby(Location loc) {
         Vector vector = loc.toVector();
         for (Lobby l : Arenas.lobbies) {
+            if(l == null)
+                continue;
             Cuboid cuboid = new Cuboid(l.getPt1(), l.getPt2());
             if (cuboid.isInCuboid(vector)) {
                 return true;
@@ -213,6 +221,7 @@ public class ArenaUtils {
 
     /**
      * Checks if the location is an arena and protected
+     *
      * @param loc The location to check
      * @return True if the location is in an arena and protected
      */
@@ -230,6 +239,7 @@ public class ArenaUtils {
 
     /**
      * Gets a list of all the arenas from file
+     *
      * @return A list of all the arenas in a file.
      */
     public static ArrayList<String> getAllArenas() {
@@ -273,10 +283,11 @@ public class ArenaUtils {
             }
             JSONObject arena = (JSONObject) jsonFile.get("arena");
             JSONObject lobby = (JSONObject) jsonFile.get("lobby");
-            Location lobbyPt1 = null, lobbyPt2 = null, arenaPt1 = null, arenaPt2 = null;
-            if (lobby != null) {
+            Location lobbyPt1 = null, lobbyPt2 = null, arenaPt1 = null, arenaPt2 = null, lobbySpawn = null;
+            if (lobby != null && !lobby.isEmpty()) {
                 lobbyPt1 = stringToLocaiton((String) lobby.get("pt1"));
                 lobbyPt2 = stringToLocaiton((String) lobby.get("pt2"));
+                lobbySpawn = stringToLocaiton((String) lobby.get("spawn"));
             }
             if (arena != null) {
                 arenaPt1 = stringToLocaiton((String) arena.get("pt1"));
@@ -287,7 +298,6 @@ public class ArenaUtils {
             a.runTaskTimer(ThePlague.instance(), 20L, 20L);
             Arenas.registerArena(a);
             Lobby l;
-            Location lobbySpawn = stringToLocaiton((String) lobby.get("spawn"));
             if (lobbySpawn != null)
                 l = new Lobby(s, lobbyPt1, lobbyPt2, lobbySpawn);
             else
@@ -301,6 +311,7 @@ public class ArenaUtils {
 
     /**
      * Saves arena data to a file
+     *
      * @param name The arena name
      * @return true if the save was successful
      */
@@ -362,11 +373,14 @@ public class ArenaUtils {
 
     /**
      * Converts a string to a location
+     *
      * @param location The string in the format world:x:y:z
      * @return A location of the string provided
      */
     private static Location stringToLocaiton(String location) {
-        String[] parts = location.split(":");
+        if (location.isEmpty() || location == null)
+            return null;
+        String[] parts = location.split("-");
         if (parts.length < 4) {
             return null;
         }
@@ -378,10 +392,11 @@ public class ArenaUtils {
 
     /**
      * Converts a location to a string
+     *
      * @param location The location to convert
      * @return A string with the location
      */
     private static String locationToString(Location location) {
-        return String.format("%s:%s:%s:%s", location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
+        return String.format("%s-%s-%s-%s", location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }
 }

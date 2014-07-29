@@ -1,6 +1,7 @@
 package me.mrkirby153.plugins.ThePlague.arena.players;
 
 import me.mrkirby153.plugins.ThePlague.arena.Arena;
+import me.mrkirby153.plugins.ThePlague.arena.ArenaUtils;
 import me.mrkirby153.plugins.ThePlague.arena.Arenas;
 import me.mrkirby153.plugins.ThePlague.utils.ChatHelper;
 import org.bukkit.ChatColor;
@@ -75,6 +76,10 @@ public class ArenaCreator implements Listener {
                 setPt2(l);
                 ChatHelper.sendToPlayer(event.getPlayer(), ChatColor.GOLD + "Point 2 set!");
             }
+        } else {
+            if(event.getItem() == null || !event.getItem().equals(Arenas.creationStick()))
+                return;
+            event.getPlayer().sendMessage(ArenaUtils.isProtected(event.getClickedBlock().getLocation())+"");
         }
     }
 

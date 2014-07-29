@@ -37,6 +37,8 @@ public class Cuboid {
      * @return True if the vector is in a cuboid
      */
     public boolean isInCuboid(Vector vector){
+        if(pt1 == null || pt2 == null)
+            return false;
         return (vector.isInAABB(Vector.getMinimum(pt1.toVector(), pt2.toVector()), Vector.getMaximum(pt1.toVector(), pt2.toVector())));
     }
 
