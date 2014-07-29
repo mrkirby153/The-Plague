@@ -3,6 +3,7 @@ package me.mrkirby153.plugins.ThePlague.command.commands;
 import me.mrkirby153.plugins.ThePlague.arena.Arena;
 import me.mrkirby153.plugins.ThePlague.arena.ArenaUtils;
 import me.mrkirby153.plugins.ThePlague.arena.Arenas;
+import me.mrkirby153.plugins.ThePlague.arena.Flag;
 import me.mrkirby153.plugins.ThePlague.arena.lobby.Lobby;
 import me.mrkirby153.plugins.ThePlague.arena.players.ArenaCreator;
 import me.mrkirby153.plugins.ThePlague.command.Command;
@@ -12,6 +13,8 @@ import me.mrkirby153.plugins.ThePlague.utils.MessageHelper;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.Set;
 
 public class ArenaCommands {
 
@@ -190,7 +193,7 @@ public class ArenaCommands {
         MessageHelper.sendMessage(sender, "arena.restore.success");
     }
 
-    @Command(name = "inv", permission = "theplague.admin.inv")
+    @Command(name = "inventory", permission = "theplague.general.inventory", description = "Restores your inventory if the server crashed while you were in a game")
     public void saveToFile(CommandSender sender, String[] args){
         if(args.length == 1){
             Player p = (Player) sender;
@@ -200,6 +203,21 @@ public class ArenaCommands {
         Player p = (Player) sender;
         InventorySaver.savePlayerInventory(p);
         p.sendMessage("Saved");
+    }
+
+    @Command(name = "flags", permission = "theplague.admin.flags", description = "View/Set flags of the given arena")
+    public void getFlags(CommandSender sender, String[] args){
+        if(args.length == 1){
+            Arena a = Arenas.findByName(args[0]);
+            MessageHelper.sendMessage(sender, "flags.header", a.getName());
+            Set<Flag> flagList = a.getFlags().keySet();
+            for(Flag f : flagList){
+                MessageHelper.sendMessage(sender, "flags.flag", f.toString(), a.getFlags().get(f));
+            }
+            MessageHelper.sendMessage(sender, "flags.footer");
+        } else {
+            MessageHelper.sendMessage(sender, "command.help.flags");
+        }
     }
 
 }

@@ -20,6 +20,7 @@ command:
             arena: 'Create an arena with /theplague create <ARENA NAME>'
         resave: 'Write all the blocks of the given arena to its file via /theplague resave <ARENA NAME>'
         restore: 'Load all the blocks from disk via /theplague restore <ARENA NAME>'
+        flags: '&4Get a list of flags with /theplague flags <ARENA NAME>'
     msg-update:
         msgFileReset: '&4Reset message file'
         help: '&4Usage: /theplague msg-reset (safe)'
@@ -60,3 +61,7 @@ arena:
         success: '&2Loaded blocks from disk!'
     savingArena: 'Saving %1 to file'
     saveComplete: 'Saved %1 blocks in %2 seconds!'
+flags:
+    header: '&7----- &6%1 Flags -----'
+    footer: '&7----------------------'
+    flag: '    - &4%1 &6= &4%2'

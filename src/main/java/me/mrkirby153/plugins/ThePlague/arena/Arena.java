@@ -15,6 +15,7 @@ import org.json.simple.parser.ParseException;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class Arena extends BukkitRunnable {
     /* Fields related to the storing of arena data*/
@@ -24,7 +25,9 @@ public class Arena extends BukkitRunnable {
     private World world;
     private ArrayList<String> playersInGame = new ArrayList<String>();
     private ArrayList<String> infectedPlayers = new ArrayList<String>();
-    private HashMap<Flag, String> flags = new HashMap<Flag, String>();
+    private HashMap<Flag, String> defaultFlags = new HashMap<Flag, String>();
+    private HashMap<Flag, String> runtimeFlags = new HashMap<Flag, String>();
+    private HashMap<Flag, String> flagList = new HashMap<Flag, String>();
 
     /* Fields related to the temporary storage of data related to the arena */
     private ArrayList<Location> uninfedtedSpawnLocations = new ArrayList<Location>();
@@ -332,14 +335,18 @@ public class Arena extends BukkitRunnable {
      * @param flagName The flag to be set
      * @param value    The flag's value
      */
-    public void setFlag(Flag flagName, String value) {
-        String currentValue = flags.get(flagName);
+    public void setDefaultFlag(Flag flagName, String value) {
+        String currentValue = defaultFlags.get(flagName);
         if (currentValue == null || currentValue.isEmpty()) {
-            flags.put(flagName, value);
+            defaultFlags.put(flagName, value);
             return;
         }
-        flags.remove(flagName);
-        flags.put(flagName, value);
+        defaultFlags.remove(flagName);
+        defaultFlags.put(flagName, value);
+    }
+
+    public void removeDefaultFlag(Flag flagName){
+        defaultFlags.remove(flagName);
     }
 
     /**
@@ -350,5 +357,23 @@ public class Arena extends BukkitRunnable {
      */
     public String getFlagValue(Flag flag) {
         return flags.get(flag);
+    }
+
+    public HashMap<Flag, String> getFlags(){
+        updateFlags();
+        return flagList;
+    }
+
+    private void updateFlags(){
+        if(flagList == null)
+            flagList = new HashMap<Flag, String>();
+        Set<Flag> defaultFlagKeys = defaultFlags.keySet();
+        Set<Flag> runtimeFlagKeys = runtimeFlags.keySet();
+        for(Flag f : defaultFlagKeys){
+            flagList.put(f, defaultFlags.get(f));
+        }
+        for(Flag f : runtimeFlagKeys){
+            flagList.put(f, runtimeFlags.get(f));
+        }
     }
 }
