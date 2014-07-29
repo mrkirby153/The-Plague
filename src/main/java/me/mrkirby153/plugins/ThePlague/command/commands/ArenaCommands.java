@@ -7,6 +7,7 @@ import me.mrkirby153.plugins.ThePlague.arena.lobby.Lobby;
 import me.mrkirby153.plugins.ThePlague.arena.players.ArenaCreator;
 import me.mrkirby153.plugins.ThePlague.command.Command;
 import me.mrkirby153.plugins.ThePlague.command.SubCommand;
+import me.mrkirby153.plugins.ThePlague.utils.InventorySaver;
 import me.mrkirby153.plugins.ThePlague.utils.MessageHelper;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -187,6 +188,18 @@ public class ArenaCommands {
         }
         ArenaUtils.loadBlocksFromFile(a);
         MessageHelper.sendMessage(sender, "arena.restore.success");
+    }
+
+    @Command(name = "inv", permission = "theplague.admin.inv")
+    public void saveToFile(CommandSender sender, String[] args){
+        if(args.length == 1){
+            Player p = (Player) sender;
+            InventorySaver.loadPlayerInventory(p);
+            return;
+        }
+        Player p = (Player) sender;
+        InventorySaver.savePlayerInventory(p);
+        p.sendMessage("Saved");
     }
 
 }

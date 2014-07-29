@@ -8,6 +8,7 @@ import me.mrkirby153.plugins.ThePlague.command.commands.GameCommands;
 import me.mrkirby153.plugins.ThePlague.command.commands.GeneralCommands;
 import me.mrkirby153.plugins.ThePlague.listeners.ArenaListener;
 import me.mrkirby153.plugins.ThePlague.listeners.CreationListener;
+import me.mrkirby153.plugins.ThePlague.listeners.GeneralListener;
 import me.mrkirby153.plugins.ThePlague.signs.SignUpdater;
 import me.mrkirby153.plugins.ThePlague.signs.Signs;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -39,6 +40,7 @@ public class ThePlague extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new ArenaListener(), this);
         getServer().getPluginManager().registerEvents(new CreationListener(), this);
+        getServer().getPluginManager().registerEvents(new GeneralListener(), this);
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new SignUpdater(), 10L, 10L);
 
         ArenaUtils.loadAllArenas();
