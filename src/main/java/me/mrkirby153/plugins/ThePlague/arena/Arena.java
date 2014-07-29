@@ -356,7 +356,7 @@ public class Arena extends BukkitRunnable {
      * @return The flag's value
      */
     public String getFlagValue(Flag flag) {
-        return flags.get(flag);
+        return flagList.get(flag);
     }
 
     public HashMap<Flag, String> getFlags(){
